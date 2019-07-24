@@ -120,5 +120,13 @@
 			{key: 'explo-3-maxdown' }],
 			frameRate: 8,
 			repeat: 0});
+		game.anims.create({
+			key: 'bomb',
+			frames: [
+			{key: 'bomb-0' },
+			{key: 'bomb-1' },
+			{key: 'bomb-2' }]
+			frameRate:8,
+			repeat: 0});
 		load_player_anim()
 }
