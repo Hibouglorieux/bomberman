@@ -51,6 +51,13 @@ function get_coord_y(y)
     return ((y + 0.5 - 0.25) * tile_size);
 }
 
+function get_player_hitbox(x, y)
+{
+    var hit = tile_size - scale;
+    y += 0.25 * tile_size;
+    return [[x + hit / 2, y + hit / 2], [x - hit / 2, y + hit / 2], [x + hit / 2, y - hit / 2], [x - hit / 2, y - hit / 2]];
+}
+
 var game = new Phaser.Game(config);
 
 function preload ()
