@@ -132,12 +132,14 @@ function create ()
 
     const map = this.add.image(width / 2, height / 2, 'map');
     map.setScale(scale);
-    //sprite = this.add.sprite(get_coord_x(start_x), get_coord_y(start_y), 'sprite');
-    //sprite.setScale(scale);
+	Players = {
+         W_player : this.add.sprite(get_coord_x(start_x), get_coord_y(start_y), 'w_down_0'),
+		 face : "down",
+	};
+        create_anim();
     // var sprites = map.createFromObjects('sprite', 10, null);
-        // create_anim();
-         W_player = this.add.sprite(get_coord_x(start_x), get_coord_y(start_y), 'w_down_0');
-		 W_player.setScale(scale);
+		 Players.W_player.setScale(scale);
+        //W_player = this.add.sprite(get_coord_x(start_x), get_coord_y(start_y), 'w_down_0');
         // W_player.play('w_up');
         // this.add.sprite(200, 200, 'explo-0-mid').play('explo_mid');
         // this.add.sprite(184, 200, 'explo-0-midleft').play('explo_midleft');

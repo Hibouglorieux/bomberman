@@ -8,7 +8,7 @@
 			{ key: 'w_up_2' },
 			{ key: 'w_up_0' }],
 			frameRate: 10,
-			repeat: -1});
+			repeat: 0});
 		game.anims.create({
 			key: 'w_down',
 			frames: [
@@ -17,7 +17,7 @@
 			{ key: 'w_down_2' },
 			{ key: 'w_down_0' }],
 			frameRate: 10,
-			repeat: -1});
+			repeat: 0});
 		game.anims.create({
 			key: 'w_left',
 			frames: [
@@ -26,7 +26,7 @@
 			{ key: 'w_left_2' },
 			{ key: 'w_left_0' }],
 			frameRate: 10,
-			repeat: -1});
+			repeat: 0});
 		game.anims.create({
 			key: 'w_right',
 			frames: [
@@ -35,7 +35,7 @@
 			{ key: 'w_right_2' },
 			{ key: 'w_right_0' }],
 			frameRate: 10,
-			repeat: -1});
+			repeat: 0});
 }
 	function create_anim()
 {
