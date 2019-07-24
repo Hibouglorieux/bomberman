@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./phaser/dist/phaser.js"></script>
+</head>
+<body>
+
+    <script>
+    const level = [
+        [   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+        [   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
+        [   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1],
+        [   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
+        [   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1],
+        [   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
+        [   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1],
+        [   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
+        [   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1],
+        [   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
+        [   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1,   0,   1],
+        [   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
+        [   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1]
+    ];
+    const scale = 5;
+    const speed = 7;
+    const start_x = 1;
+    const start_y = 1;
+    const tile_size = scale * 16;
+    const width = 240 * scale;
+    const height = 208 * scale;
+       var config = {
+    type: Phaser.AUTO,
+    width: width,
+    height: height,
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+function get_coord_x(x)
+{
+    return ((x + 0.5) * tile_size);
+}
+
+function get_coord_y(y)
+{
+    return ((y + 0.5 - 0.25) * tile_size);
+}
+
+var game = new Phaser.Game(config);
+
+function preload ()
+{
+    this.load.image('map', 'terrain.png');
+
+    this.load.tilemapTiledJSON('tilemap', 'terrain.json');
+    this.load.image('sprite', 'anim_player/B0DEATH.png');
+
+}
+
+function create ()
+{
+     key_up = this.input.keyboard.addKey('W');
+     key_right = this.input.keyboard.addKey('D');
+     key_bottom = this.input.keyboard.addKey('S');
+     key_left = this.input.keyboard.addKey('A');
+
+    const tilemap = this.make.tilemap({key:'tilemap'});
+    tileset = tilemap.addTilesetImage('tiles', 'map');
+    const map = this.add.image(width / 2, height / 2, 'map');
+    map.setScale(scale);
+    sprite = this.add.sprite(get_coord_x(start_x), get_coord_y(start_y), 'sprite');
+    sprite.setScale(scale);
+    // var sprites = map.createFromObjects('sprite', 10, null);
+}
+
+function update ()
+{
+    if (key_up.isDown)
+    {
+        sprite.y -= speed;
+    }
+     if (key_bottom.isDown)
+    {
+        sprite.y += speed;
+    }
+     if (key_left.isDown)
+    {
+        sprite.x -= speed;
+    }
+     if (key_right.isDown)
+    {
+        sprite.x += speed;
+    }
+}
+    </script>
+
+</body>
+</html>
