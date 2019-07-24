@@ -3,6 +3,7 @@
 <head>
     <script src="./phaser/dist/phaser.js"></script>
 	<script src="create_anim.js"></script>
+	<script src="manage_mvt.js"></script>
 </head>
 <body>
 
@@ -57,9 +58,7 @@ function preload ()
     this.load.image('map', 'terrain.png');
 
     // this.load.tilemapTiledJSON('tilemap', 'terrain.json');
-    this.load.image('sprite', 'anim_player/B0DEATH.png');
-
-    this.load.image('w_up_0', 'anim_player/W_UP_0.png');
+		this.load.image('w_up_0', 'anim_player/W_UP_0.png');
         this.load.image('w_up_1', 'anim_player/W_UP_1.png');
         this.load.image('w_up_2', 'anim_player/W_UP_2.png');
         this.load.image('w_down_0', 'anim_player/W_DOWN_0.png');
@@ -126,11 +125,12 @@ function create ()
 
     const map = this.add.image(width / 2, height / 2, 'map');
     map.setScale(scale);
-    sprite = this.add.sprite(get_coord_x(start_x), get_coord_y(start_y), 'sprite');
-    sprite.setScale(scale);
+    //sprite = this.add.sprite(get_coord_x(start_x), get_coord_y(start_y), 'sprite');
+    //sprite.setScale(scale);
     // var sprites = map.createFromObjects('sprite', 10, null);
         // create_anim();
-        // let W_player = this.add.sprite(500, 500, 'w_up_0');
+         W_player = this.add.sprite(get_coord_x(start_x), get_coord_y(start_y), 'w_up_0');
+		 W_player.setScale(scale);
         // W_player.play('w_up');
         // this.add.sprite(200, 200, 'explo-0-mid').play('explo_mid');
         // this.add.sprite(184, 200, 'explo-0-midleft').play('explo_midleft');
@@ -147,22 +147,7 @@ function create ()
 
 function update ()
 {
-    if (key_up.isDown)
-    {
-        sprite.y -= speed;
-    }
-     if (key_bottom.isDown)
-    {
-        sprite.y += speed;
-    }
-     if (key_left.isDown)
-    {
-        sprite.x -= speed;
-    }
-     if (key_right.isDown)
-    {
-        sprite.x += speed;
-    }
+	movement();
 }
     </script>
 
