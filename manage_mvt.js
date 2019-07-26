@@ -1,6 +1,6 @@
 function movement()
 {
-    if (key_up.isDown)
+	if (key == "up")
     {
     	for (var i = 0; i < speed; i++)
     	{
@@ -15,7 +15,7 @@ function movement()
 		Players.W_player.play('w_up');
 		Players.W_player.face = "up"
     }
-	else if (key_bottom.isDown)
+	else if (key == "bottom")
     {
         for (var i = 0; i < speed; i++)
     	{
@@ -30,7 +30,7 @@ function movement()
 		Players.W_player.play('w_down');
 		Players.W_player.face = "down"
     }
-    else if (key_left.isDown)
+	else if (key == "left")
     {
     	for (var i = 0; i < speed; i++)
     	{
@@ -45,7 +45,7 @@ function movement()
 		Players.W_player.play('w_left');
 		Players.W_player.face = "left"
     }
-	else if (key_right.isDown)
+	else if (key == "right")
     {
         for (var i = 0; i < speed; i++)
     	{
