@@ -179,21 +179,20 @@ function create ()
 
 function update ()
 {
-		 console.log(key_up.repeats);
 	if (key_up.isDown &&
 		 (key_bottom.isUp || key_up.repeats < key_bottom.repeats) &&
 		 (key_left.isUp || key_up.repeats < key_left.repeats) && 
 		 (key_right.isUp || key_up.repeats < key_right.repeats))
 		key = "up";
 	else if (key_right.isDown &&
-		 (key_up.isUp || key_bottom.repeats < key_up.repeats) && 
-		 (key_left.isUp || key_bottom.repeats < key_left.repeats) && 
-		 (key_right.isUp || key_bottom.repeats < key_right.repeats))
+		 (key_up.isUp || key_right.repeats < key_up.repeats) && 
+		 (key_left.isUp || key_right.repeats < key_left.repeats) && 
+		 (key_bottom.isUp || key_right.repeats < key_bottom.repeats))
 		key = "right";
 	else if (key_bottom.isDown &&
-		 (key_bottom.isUp || key_right.repeats < key_bottom.repeats) && 
-		 (key_left.isUp || key_right.repeats < key_left.repeats) && 
-		 (key_up.isUp || key_right.repeats < key_up.repeats))
+		 (key_right.isUp || key_bottom.repeats < key_right.repeats) && 
+		 (key_left.isUp || key_bottom.repeats < key_left.repeats) && 
+		 (key_up.isUp || key_bottom.repeats < key_up.repeats))
 		key = "bottom";
 	else if (key_left.isDown &&
 		 (key_bottom.isUp || key_left.repeats < key_bottom.repeats) && 
