@@ -2,38 +2,33 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-//	"io/ioutil"
 	"log"
-	"bytes"
-//	"html"
+	"net/http"
+
+	socketio "github.com/googollee/go-socket.io"
 )
 
-//var INDEX_HTML []byte
-//var value string = "hell"
+func main() {
+	mainserver, err := socketio.NewServer(nil)
+	if err != nil {
+		fmt.Println("fatal error with NewServer", err)
+		log.Fatal(err)
+	}
+	mainserver.OnEvent("/", "testGo", func(s socketio.Conn, msg string) {
+		fmt.Println("notice:", msg)
+		s.Emit("log", "have " + msg)
+	})
+	mainserver.OnError("/", func(e error) {
+		fmt.Println("meet error:", e)
+	})
+	mainserver.OnDisconnect("/", func(s socketio.Conn, msg string) {
+		fmt.Println("closed", msg)
+	})
+	go mainserver.Serve()
+	defer mainserver.Close()
 
-func main(){
-	fmt.Printf("starting server on http://localhost:8000/\n")
-//	http.HandleFunc("/", IndexHandler)
-	fs := http.FileServer(http.Dir(".."))
-	http.Handle("/", fs)
-	http.HandleFunc("/post", PostHandler)
-	http.ListenAndServe(":8000", nil)
+	http.Handle("/socket.io/", mainserver)
+	http.Handle("/", http.FileServer(http.Dir("..")))
+	log.Println("Serving at localhost:80...")
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
-
-//func IndexHandler(w http.ResponseWriter, r *http.Request){
-//	log.Println("GET /")
-//	w.Write(INDEX_HTML)
-//}
-
-func PostHandler(w http.ResponseWriter, r *http.Request){
-//	r.ParseForm()
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(r.Body)
-	log.Printf("hello Nathan %s\n", buf.String())
-//	var value = r.FormValue("textfield")
-	w.Write([]byte("hell"))
-}
-//func init(){
-//	INDEX_HTML, _ = ioutil.ReadFile("../index.html")
-//}

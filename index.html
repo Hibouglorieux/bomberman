@@ -2,10 +2,15 @@
 <html>
 <head>
     <script src="phaser/dist/phaser.js"></script>
+	 <script type="text/javascript" src="socket.io.js"></script>
 </head>
 <body>
 
     <script>
+	let socket = io.connect();
+	socket.on("log", (data)=>{
+		console.log("Reception du serveur ", data);
+	})
     const level = [
         [   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
         [   1,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   1],
@@ -160,30 +165,31 @@ function update ()
 		let pos = player_pixel_2_map(Players.W_player);
 		global.bombs.push(bomb_anim(this, pos, 3));
 	}
+	
 	  //  if (Phaser.Input.Keyboard.JustDown('p'))
 	//{
 	//if (.JustDown())
 	  if (Phaser.Input.Keyboard.JustDown(key_p))
 	    {
-		console.log("wazaaa");
-		loadXMLDoc(this);
+		socket.emit("testGo", "test serveur");
+//		loadXMLDoc(this);
 	}
 }
 
-function loadXMLDoc(scene) {
-    var xmlhttp;
-    xmlhttp=new XMLHttpRequest();
-    xmlhttp.onreadystatechange=function()
-    {
-	if (xmlhttp.readyState==4 && xmlhttp.status==200)
-	{
-		let pos = player_pixel_2_map(Players.W_player);
-		global.bombs.push(bomb_anim(scene, pos, 3));
-	}
-    }
-    xmlhttp.open("POST","post",true);
-    xmlhttp.send("t'es trop beau");
-}
+//function loadXMLDoc(scene) {
+//    var xmlhttp;
+//    xmlhttp=new XMLHttpRequest();
+//    xmlhttp.onreadystatechange=function()
+//    {
+//	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+//	{
+//		let pos = player_pixel_2_map(Players.W_player);
+//		global.bombs.push(bomb_anim(scene, pos, 3));
+//	}
+//    }
+//    xmlhttp.open("POST","post",true);
+//    xmlhttp.send("t'es trop beau");
+//}
 	</script>
 
 	<script src="create_anim.js"></script>

@@ -2,6 +2,7 @@ function check_case_explosion(x, y)
 {
 	let value = level[y][x];
 
+	console.log(value);
 	//check_player;
 	if (!value)
 		return (0);
@@ -13,4 +14,5 @@ function check_case_explosion(x, y)
 	{
 		//generate more explosion
 	}
+	return (1);
 }
