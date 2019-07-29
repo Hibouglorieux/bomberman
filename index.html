@@ -26,14 +26,14 @@
     {
         mur[i] = new Array(15);
     }
-    const scale = 4;
+    const scale = 1;
     const mvnt_liberty = 6;
     const speed = 7;
     const start_x = 1;
     const start_y = 1;
-    const tile_size = scale * 16;
-    const width = 240 * scale;
-    const height = 208 * scale;
+    const tile_size = 64;
+    const width = 960;
+    const height = 832;
        let config = {
     type: Phaser.AUTO,
     width: width,
@@ -88,19 +88,17 @@ function create ()
 	 key_space = this.input.keyboard.addKey('SPACE');
 
     const map = this.add.image(width / 2, height / 2, 'map');
-    map.setScale(scale);
 	Players = {
          W_player : this.add.sprite(get_coord_x(start_x), get_coord_y_player(start_y), 'w_down_0'),
 		 face : "down",
 	};
+	Players.W_player.setDepth(1);
     create_anim();
-	Players.W_player.setScale(scale);
     for (var i = 0; i < level.length; i++) {
         for (var j = 0; j < level[i].length; j++) {
              if (level[i][j] == 2)
              {
                 mur[i][j] = this.add.sprite(get_coord_x(j), get_coord_y(i), 'bomb-0');
-                mur[i][j].setScale(scale);
              }
          } 
     }
@@ -134,25 +132,25 @@ function update ()
 		 (key_bottom.isUp || key_right.repeats < key_bottom.repeats))
 		key = "right";
 	else if (key_bottom.isDown &&
-		 (key_right.isUp || key_bottom.repeats < key_right.repeats) && 
-		 (key_left.isUp || key_bottom.repeats < key_left.repeats) && 
-		 (key_up.isUp || key_bottom.repeats < key_up.repeats))
+			(key_right.isUp || key_bottom.repeats < key_right.repeats) && 
+			(key_left.isUp || key_bottom.repeats < key_left.repeats) && 
+			(key_up.isUp || key_bottom.repeats < key_up.repeats))
 		key = "bottom";
 	else if (key_left.isDown &&
-		 (key_bottom.isUp || key_left.repeats < key_bottom.repeats) && 
-		 (key_up.isUp || key_left.repeats < key_up.repeats) && 
-		 (key_right.isUp || key_left.repeats < key_right.repeats))
+			(key_bottom.isUp || key_left.repeats < key_bottom.repeats) && 
+			(key_up.isUp || key_left.repeats < key_up.repeats) && 
+			(key_right.isUp || key_left.repeats < key_right.repeats))
 		key = "left";
 	else
 		key = key;
 	if (key == "up" && key_up.isUp)
-		 key = "";
+		key = "";
 	if (key == "right" && key_right.isUp)
-		 key = "";
+		key = "";
 	if (key == "bottom" && key_bottom.isUp)
-		 key = "";
+		key = "";
 	if (key == "left" && key_left.isUp)
-		 key = "";
+		key = "";
 	movement();
 	if (key_space.isDown)
 	{
@@ -161,7 +159,7 @@ function update ()
 		global.bombs.push(bomb_anim(this, pos, 3));
 	}
 }
-    </script>
+	</script>
 
 	<script src="create_anim.js"></script>
 	<script src="manage_mvt.js"></script>

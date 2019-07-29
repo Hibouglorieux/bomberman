@@ -1,8 +1,8 @@
 function map2pixel_xy(x, y)
 {
 	let pixels = {
-		x: x * 16 * scale + 8 * scale,
-		y: y * 16 * scale + 8 * scale
+		x: x * tile_size + tile_size * 0.5,
+		y: y * tile_size + tile_size * 0.5
 	};
 	return (pixels);
 }
@@ -10,20 +10,20 @@ function map2pixel_xy(x, y)
 function pixel2map_xy(x, y)
 {
 	let	map = {
-		x: Math.floor(x / (16 * scale)),
-		y: Math.floor(y / (16 * scale))
+		x: Math.floor(x / (tile_size)),
+		y: Math.floor(y / (tile_size))
 	};
 	return (map);
 }	
 
 function map2pixel(z)
 {
-	return (z * 16 * scale + 8 * scale);
+	return (z * tile_size + tile_size * 0.5);
 }
 
 function pixel2map(z)
 {
-	return (Math.floor(z / (16 * scale)));
+	return (Math.floor(z / (tile_size)));
 }
 
 function player_pixel_2_map(player)
@@ -39,8 +39,8 @@ function player_pixel_2_map(player)
 	if (player.face == "left")
 		x -= 8;
 	let	pos = {
-		x:Math.floor(x / (16 * scale)),
-		y:Math.floor((y + 16 * scale * 0.5) / (16 * scale))
+		x:Math.floor(x / (tile_size)),
+		y:Math.floor((y + tile_size * 0.5) / (tile_size))
 	}
 	return (pos);
 }
