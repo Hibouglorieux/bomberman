@@ -8,7 +8,8 @@ function	bomb_anim(scene, pos, length)
 	bomb.anim.once('animationcomplete', () => {
 		explosion_anim(scene, bomb.pos, bomb.length);
 		global.bombs.splice(global.bombs.indexOf(bomb), 1);
-		bomb.anim.destroy()
+		bomb.anim.destroy();
+		delete bomb;
 		});
 	return (bomb);
 }
@@ -18,8 +19,6 @@ function	explosion_anim(scene, pos, length)
 	let x = pos.x;
 	let y = pos.y;
 	let explo = {anim:[scene.add.sprite(map2pixel(x), map2pixel(y), 'explo-0-mid').play('explo_mid')]};
-	console.log(x, y);
-	console.log(map2pixel(x), map2pixel(y));
 
 
 	x--;
@@ -80,6 +79,7 @@ function	explosion_anim(scene, pos, length)
 		global.explo.splice(global.bombs.indexOf(explo), 1);
 		explo.anim.forEach((elem)=>{
 			elem.destroy()
-		})
+		});
+		delete explo
 		});
 }

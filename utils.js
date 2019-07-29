@@ -30,14 +30,16 @@ function player_pixel_2_map(player)
 {
 	let x = player.x;
 	let y = player.y;
+	/* Pansement du scale
 	if (player.face == "up")
-		y -= 8;
+		y -= 1 * scale;
 	if (player.face == "down")
-		y += 8;
+		y += 1 * scale;
 	if (player.face == "right")
-		x += 8;
+		x += 1 * scale;
 	if (player.face == "left")
-		x -= 8;
+		x -= 1 * scale;
+			*/
 	let	pos = {
 		x:Math.floor(x / (16 * scale)),
 		y:Math.floor((y + 16 * scale * 0.5) / (16 * scale))
