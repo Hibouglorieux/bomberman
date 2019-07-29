@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="./phaser/dist/phaser.js"></script>
+    <script src="phaser/dist/phaser.js"></script>
 </head>
 <body>
 
@@ -86,7 +86,8 @@ function create ()
      key_right = this.input.keyboard.addKey('D');
      key_bottom = this.input.keyboard.addKey('S');
      key_left = this.input.keyboard.addKey('A');
-	 key_space = this.input.keyboard.addKey('SPACE');
+	key_space = this.input.keyboard.addKey('SPACE');
+	key_p = this.input.keyboard.addKey('P');
 
     const map = this.add.image(width / 2, height / 2, 'map');
 	Players = {
@@ -159,6 +160,29 @@ function update ()
 		let pos = player_pixel_2_map(Players.W_player);
 		global.bombs.push(bomb_anim(this, pos, 3));
 	}
+	  //  if (Phaser.Input.Keyboard.JustDown('p'))
+	//{
+	//if (.JustDown())
+	  if (Phaser.Input.Keyboard.JustDown(key_p))
+	    {
+		console.log("wazaaa");
+		loadXMLDoc(this);
+	}
+}
+
+function loadXMLDoc(scene) {
+    var xmlhttp;
+    xmlhttp=new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function()
+    {
+	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+	{
+		let pos = player_pixel_2_map(Players.W_player);
+		global.bombs.push(bomb_anim(scene, pos, 3));
+	}
+    }
+    xmlhttp.open("POST","post",true);
+    xmlhttp.send("t'es trop beau");
 }
 	</script>
 
