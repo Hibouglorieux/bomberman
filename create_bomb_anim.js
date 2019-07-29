@@ -46,6 +46,7 @@ function	explosion_anim(scene, pos, length)
 	}
 	let pixel_x = map2pixel(pos.x);
 	y--;
+	x = pos.x;
 	while (pos.y - y <= length && y >= 0)
 	{
 		if (level[y][x] == 2 || level[y][x] == 1)
