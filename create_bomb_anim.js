@@ -3,7 +3,6 @@ function	bomb_anim(scene, pos, length)
 	let bomb = {pos:{x:pos.x, y:pos.y}, length:length};
 
 	bomb.anim = scene.add.sprite(map2pixel(pos.x), map2pixel(pos.y), 'bomb-0').play('bomb-anim-0');
-	bomb.anim.setScale(scale);
 	
 	bomb.anim.once('animationcomplete', () => {
 		explosion_anim(scene, bomb.pos, bomb.length);
@@ -27,7 +26,6 @@ function	explosion_anim(scene, pos, length)
 		if (level[y][x] == 2 || level[y][x] == 1)
 			break;
 		let pixel_y = map2pixel(y);
-		console.log(pos.x - (x - 16 * scale));
 		if (pos.x - x != length)
 			explo.anim.push(scene.add.sprite(map2pixel(x), pixel_y, 'explo-0-midleft').play('explo_midleft'));
 		else
@@ -35,7 +33,7 @@ function	explosion_anim(scene, pos, length)
 		x--;
 	}
 	x = pos.x + 1;
-	while (x - pos.x <= length && x < 15 * 16 * scale)
+	while (x - pos.x <= length && x < 15)
 	{
 		if (level[y][x] == 2 || level[y][x] == 1)
 			break;
@@ -70,10 +68,9 @@ function	explosion_anim(scene, pos, length)
 		y++;
 	}
 	// to finish
-	explo.anim.forEach((elem)=>{
-		elem.setScale(scale)
+	explo.anim.forEach((elem) =>{
+		elem.setDepth(2);
 	});
-	explo.anim[0].setScale(scale);
 	global.explo.push(explo);
 	explo.anim[0].once('animationcomplete', () => {
 		global.explo.splice(global.bombs.indexOf(explo), 1);
