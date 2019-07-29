@@ -68,9 +68,6 @@ function	explosion_anim(scene, pos, length)
 		y++;
 	}
 	// to finish
-	explo.anim.forEach((elem) =>{
-		elem.setDepth(2);
-	});
 	global.explo.push(explo);
 	explo.anim[0].once('animationcomplete', () => {
 		global.explo.splice(global.bombs.indexOf(explo), 1);
