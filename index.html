@@ -2,8 +2,6 @@
 <html>
 <head>
     <script src="./phaser/dist/phaser.js"></script>
-	<script src="create_anim.js"></script>
-	<script src="manage_mvt.js"></script>
 </head>
 <body>
 
@@ -23,8 +21,8 @@
         [   1,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   1],
         [   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1]
     ];
-    var mur = new Array(13);
-    for (var i = 0; i < mur.length; i++)
+    let mur = new Array(13);
+    for (let i = 0; i < mur.length; i++)
     {
         mur[i] = new Array(15);
     }
@@ -36,7 +34,7 @@
     const tile_size = scale * 16;
     const width = 240 * scale;
     const height = 208 * scale;
-       var config = {
+       let config = {
     type: Phaser.AUTO,
     width: width,
     height: height,
@@ -78,64 +76,7 @@ var game = new Phaser.Game(config);
 
 function preload ()
 {
-    this.load.image('map', 'terrain.png');
-
-		this.load.image('w_up_0', 'anim_player/W_UP_0.png');
-        this.load.image('w_up_1', 'anim_player/W_UP_1.png');
-        this.load.image('w_up_2', 'anim_player/W_UP_2.png');
-        this.load.image('w_down_0', 'anim_player/W_DOWN_0.png');
-        this.load.image('w_down_1', 'anim_player/W_DOWN_1.png');
-        this.load.image('w_down_2', 'anim_player/W_DOWN_2.png');
-        this.load.image('w_left_0', 'anim_player/W_LEFT_0.png');
-        this.load.image('w_left_1', 'anim_player/W_LEFT_1.png');
-        this.load.image('w_left_2', 'anim_player/W_LEFT_2.png');
-        this.load.image('w_right_0', 'anim_player/W_RIGHT_0.png');
-        this.load.image('w_right_1', 'anim_player/W_RIGHT_1.png');
-        this.load.image('w_right_2', 'anim_player/W_RIGHT_2.png');
-        this.load.image('explo-0-mid', 'anim_bombs/MID_EXPLO_3.png');
-        this.load.image('explo-1-mid', 'anim_bombs/MID_EXPLO_2.png');
-        this.load.image('explo-2-mid', 'anim_bombs/MID_EXPLO_1.png');
-        this.load.image('explo-3-mid', 'anim_bombs/MID_EXPLO_0.png');
-        this.load.image('explo-0-midleft', 'anim_bombs/M_LEFT_EXPLO_3.png');
-        this.load.image('explo-1-midleft', 'anim_bombs/M_LEFT_EXPLO_2.png');
-        this.load.image('explo-2-midleft', 'anim_bombs/M_LEFT_EXPLO_1.png');
-        this.load.image('explo-3-midleft', 'anim_bombs/M_LEFT_EXPLO_0.png');
-        this.load.image('explo-0-maxleft', 'anim_bombs/T_LEFT_EXPLO_3.png');
-        this.load.image('explo-1-maxleft', 'anim_bombs/T_LEFT_EXPLO_2.png');
-        this.load.image('explo-2-maxleft', 'anim_bombs/T_LEFT_EXPLO_1.png');
-        this.load.image('explo-3-maxleft', 'anim_bombs/T_LEFT_EXPLO_0.png');
-        this.load.image('explo-0-midtop', 'anim_bombs/M_UP_EXPLO_3.png');
-        this.load.image('explo-1-midtop', 'anim_bombs/M_UP_EXPLO_2.png');
-        this.load.image('explo-2-midtop', 'anim_bombs/M_UP_EXPLO_1.png');
-        this.load.image('explo-3-midtop', 'anim_bombs/M_UP_EXPLO_0.png');
-        this.load.image('explo-0-maxtop', 'anim_bombs/T_UP_EXPLO_3.png');
-        this.load.image('explo-1-maxtop', 'anim_bombs/T_UP_EXPLO_2.png');
-        this.load.image('explo-2-maxtop', 'anim_bombs/T_UP_EXPLO_1.png');
-        this.load.image('explo-3-maxtop', 'anim_bombs/T_UP_EXPLO_0.png');
-        this.load.image('explo-0-middown', 'anim_bombs/M_DOWN_EXPLO_3.png');
-        this.load.image('explo-1-middown', 'anim_bombs/M_DOWN_EXPLO_2.png');
-        this.load.image('explo-2-middown', 'anim_bombs/M_DOWN_EXPLO_1.png');
-        this.load.image('explo-3-middown', 'anim_bombs/M_DOWN_EXPLO_0.png');
-        this.load.image('explo-0-maxdown', 'anim_bombs/T_DOWN_EXPLO_3.png');
-        this.load.image('explo-1-maxdown', 'anim_bombs/T_DOWN_EXPLO_2.png');
-        this.load.image('explo-2-maxdown', 'anim_bombs/T_DOWN_EXPLO_1.png');
-        this.load.image('explo-3-maxdown', 'anim_bombs/T_DOWN_EXPLO_0.png');
-        this.load.image('explo-0-midright', 'anim_bombs/M_RIGHT_EXPLO_3.png');
-        this.load.image('explo-1-midright', 'anim_bombs/M_RIGHT_EXPLO_2.png');
-        this.load.image('explo-2-midright', 'anim_bombs/M_RIGHT_EXPLO_1.png');
-        this.load.image('explo-3-midright', 'anim_bombs/M_RIGHT_EXPLO_0.png');
-        this.load.image('explo-0-maxright', 'anim_bombs/T_RIGHT_EXPLO_3.png');
-        this.load.image('explo-1-maxright', 'anim_bombs/T_RIGHT_EXPLO_2.png');
-        this.load.image('explo-2-maxright', 'anim_bombs/T_RIGHT_EXPLO_1.png');
-        this.load.image('explo-3-maxright', 'anim_bombs/T_RIGHT_EXPLO_0.png');
-        this.load.image('bomb-0', 'items/Bomb0.png');
-        this.load.image('bomb-1', 'items/Bomb1.png');
-        this.load.image('bomb-2', 'items/Bomb2.png');
-        this.load.image('p_speed', 'items/P_speed.png');
-        this.load.image('p_flame_up', 'items/P_flame.png');
-        this.load.image('p_bomb', 'items/P_bomb.png');
-        this.load.image('p_armor', 'items/P_armor.png');
-
+	load_images(this);
 }
 
 function create ()
@@ -144,6 +85,7 @@ function create ()
      key_right = this.input.keyboard.addKey('D');
      key_bottom = this.input.keyboard.addKey('S');
      key_left = this.input.keyboard.addKey('A');
+	 key_space = this.input.keyboard.addKey('SPACE');
 
     const map = this.add.image(width / 2, height / 2, 'map');
     map.setScale(scale);
@@ -176,6 +118,8 @@ function create ()
         // this.add.sprite(200, 216, 'explo-0-middown').play('explo_middown');
         // this.add.sprite(200, 230, 'explo-0-maxdown').play('explo_maxdown');
 }
+
+let global = {bombs:[], explo:[]};
 
 function update ()
 {
@@ -210,8 +154,19 @@ function update ()
 	if (key == "left" && key_left.isUp)
 		 key = "";
 	movement();
+	if (key_space.isDown)
+	{
+		//let pos = {x:pixel2map(Players.W_player.x) , y:pixel2map(Players.W_player.y)};
+		let pos = player_pixel_2_map(Players.W_player);
+		global.bombs.push(bomb_anim(this, pos, 3));
+	}
 }
     </script>
 
+	<script src="create_anim.js"></script>
+	<script src="manage_mvt.js"></script>
+	<script src="create_bomb_anim.js"></script>
+	<script src="load_images.js"></script>
+	<script src="utils.js"></script>
 </body>
 </html>
