@@ -25,6 +25,8 @@ function	explosion_anim(scene, pos, length)
 	x--;
 	while (pos.x - x <= length && x >= 0)
 	{
+		if (level[y][x] == 2 || level[y][x] == 1)
+			break;
 		let pixel_y = map2pixel(y);
 		console.log(pos.x - (x - 16 * scale));
 		if (pos.x - x != length)
@@ -36,6 +38,8 @@ function	explosion_anim(scene, pos, length)
 	x = pos.x + 1;
 	while (x - pos.x <= length && x < 15 * 16 * scale)
 	{
+		if (level[y][x] == 2 || level[y][x] == 1)
+			break;
 		let pixel_y = map2pixel(y);
 		if (x - pos.x != length)
 			explo.anim.push(scene.add.sprite(map2pixel(x), pixel_y, 'explo-0-midright').play('explo_midright'));
@@ -47,6 +51,8 @@ function	explosion_anim(scene, pos, length)
 	y--;
 	while (pos.y - y <= length && y >= 0)
 	{
+		if (level[y][x] == 2 || level[y][x] == 1)
+			break;
 		if (pos.y - y != length)
 			explo.anim.push(scene.add.sprite(pixel_x, map2pixel(y), 'explo-0-midtop').play('explo_midtop'));
 		else
@@ -56,6 +62,8 @@ function	explosion_anim(scene, pos, length)
 	y = pos.y + 1;
 	while (y - pos.y <= length && y < 13)
 	{
+		if (level[y][x] == 2 || level[y][x] == 1)
+			break;
 		if (y - pos.y != length)
 			explo.anim.push(scene.add.sprite(pixel_x, map2pixel(y), 'explo-0-middown').play('explo_middown'));
 		else
