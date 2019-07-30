@@ -29,6 +29,6 @@ func main() {
 
 	http.Handle("/socket.io/", mainserver)
 	http.Handle("/", http.FileServer(http.Dir("..")))
-	log.Println("Serving at localhost:80...")
-	log.Fatal(http.ListenAndServe(":80", nil))
+	log.Println("Serving at localhost:11337...")
+	log.Fatal(http.ListenAndServe(":11337", nil))
 }
