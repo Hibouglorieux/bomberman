@@ -175,6 +175,7 @@ function update ()
 	{
 		let pos = player_pixel_2_map(Players.player[id].anim);
 		global.bombs.push(bomb_anim(this, pos, 3));
+		mur[3][3].play('melt_block');
 	}
 
 }
