@@ -10,6 +10,7 @@ import (
 
 const ID_REQ = 'i'
 const NEW_ID = 'n'
+const MOVEMENT = 'M'
 
 var Clients []*websocket.Conn
 
@@ -18,7 +19,7 @@ var upgrader = websocket.Upgrader{
     WriteBufferSize: 1024,
 }
 
-func	treated_string(str string) string{
+func	treated_string(str string) string{ // UNUSED FOR NOW
 	if (str[0] == ID_REQ) {
 		return ""
 	}
@@ -26,8 +27,18 @@ func	treated_string(str string) string{
 }
 
 func	send_all(str string) {
+
 	for _, elem := range Clients {
 		elem.WriteMessage(1, []byte(str));
+	}
+}
+
+func	send_all_but_self(msg []byte, id_of_self int) {
+
+	for id, elem := range Clients{
+		if (id != id_of_self){
+			elem.WriteMessage(1, msg)
+		}
 	}
 }
 
@@ -57,6 +68,9 @@ func reader(conn *websocket.Conn) {
 		}
 		if (string(p)[0] == NEW_ID) {
 			send_all("Add" + string(p)[3:])
+		}
+		if (string(p)[0] == MOVEMENT) {
+			send_all_but_self([]byte(string(p) + strconv.Itoa(id)), id)
 		}
 		if err := conn.WriteMessage(messageType, []byte(new_msg)); err != nil {
 			for k, elem := range Clients{
