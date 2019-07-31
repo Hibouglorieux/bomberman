@@ -37,6 +37,7 @@ func	send_all_but_self(str string, id_of_self int) {
 
 	for id, elem := range Clients{
 		if (id != id_of_self){
+			fmt.Println("send to: ", id, "\nmessage: ", str)
 			elem.WriteMessage(1, []byte(str))
 		}
 	}
@@ -52,7 +53,7 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 		}
 	}
 	for {
-		var new_msg string;
+		var new_msg string = "";
 		messageType, p, err := conn.ReadMessage() // read in a message
 		if err != nil {
 			log.Println(err)
@@ -70,16 +71,18 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 		if (string(p)[0] == MOVEMENT) {
 			send_all_but_self(string(p)[0:2] + strconv.Itoa(id) + string(p)[2:], id)
 		}
-		if err := conn.WriteMessage(messageType, []byte(new_msg)); err != nil { // writes in message, if error removes client from Clients
-			for k, elem := range Clients{
-				if (elem == conn) {
-					Clients[k] = Clients[len(Clients) - 1]
-					Clients = Clients[:len(Clients) - 1]
-					break
+		if (new_msg != ""){
+			if err := conn.WriteMessage(messageType, []byte(new_msg)); err != nil { // writes in message, if error removes client from Clients
+				for k, elem := range Clients{
+					if (elem == conn) {
+						Clients[k] = Clients[len(Clients) - 1]
+						Clients = Clients[:len(Clients) - 1]
+						break
+					}
 				}
+				log.Println(err)
+				return
 			}
-			log.Println(err)
-			return
 		}
 
 	}
