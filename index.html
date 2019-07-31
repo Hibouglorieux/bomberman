@@ -10,7 +10,7 @@
 		const MOVE = 'M'
 	let id = -1;
 	let Players = {};
-	let must_add = -1;
+	let must_add = [];
         let socket = new WebSocket("ws://10.1.4.4:43681/ws"); // you might want to change that to your local address, and add another redirection to 11337 port in VM dear Hubert
         console.log("Attempting Connection...");
         socket.onopen = () => {
@@ -33,22 +33,25 @@
 			{
 				id = parseInt(event.data[2]);
 				socket.send("new".concat(id.toString()));
+				if (id >= 2)
+					must_add.push(1);
+				if (id == 3)
+					must_add.push(2);
 			}
 			if (event.data[0] == ADD_PLAYER) // makes it pop on screen
-				must_add = parseInt(event.data[3]);
+				must_add.push(parseInt(event.data[3]));
 			if (event.data[0] == MOVE)// makes other player move in real time
 			{
+				let nb = event.data[2].charCodeAt() - 48;
+				console.log(typeof nb, nb);
 				console.log(Players);
-				let nb = parseInt(event.data[3]);
-				console.log(nb);
-				if (event.data[1] == '-' && event.data[2] == 'x')
-					Players.player[nb].anim.x -= 1;
-				if (event.data[1] == '+' && event.data[2] == 'x')
-					Players.player[nb].anim.x += 1;
-				if (event.data[1] == '-' && event.data[2] == 'y')
-					Players.player[nb].anim.y -= 1;
-				if (event.data[1] == '+' && event.data[2] == 'y')
-					Players.player[nb].anim.y += 1;
+				if (typeof Players.player[nb] == 'undefined' || typeof Players.player[nb] == 'undefined')
+					return ;
+				let nb2 = parseInt(event.data.slice(3));
+				if (event.data[1] == 'x')
+					Players.player[nb].anim.x = nb2;
+				if (event.data[1] == 'y')
+					Players.player[nb].anim.y = nb2;
 			}
         };
 
@@ -143,7 +146,7 @@ let global = {bombs:[], explo:[]};
 
 function update ()
 {
-	if (must_add != -1)
+	if (must_add.length != 0)
 		init_id(this);
 	if (id == -1)
 		return ;
