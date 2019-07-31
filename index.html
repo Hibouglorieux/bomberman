@@ -135,8 +135,13 @@ function create ()
 		for (var j = 0; j < level[i].length; j++) {
 			if (level[i][j] == 2)
 			{
+	    			this.add.sprite(get_coord_x(j), get_coord_y(i), 'vert');
 				mur[i][j] = this.add.sprite(get_coord_x(j), get_coord_y(i), 'block');
 			}
+	    		else if (level[i][j] == 1)
+	    			this.add.sprite(get_coord_x(j), get_coord_y(i), 'incassable');
+	    		else if (level[i][j] == 0)
+	    			this.add.sprite(get_coord_x(j), get_coord_y(i), 'vert');
 		} 
 	}
 	create_anim();
