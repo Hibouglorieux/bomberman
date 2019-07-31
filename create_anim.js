@@ -236,8 +236,28 @@
 			frames: [
 			{key: 'bomb-2' },
 			{key: 'bomb-1' },
+			{key: 'bomb-0' },
+			{key: 'bomb-1' },
+			{key: 'bomb-2' },
+			{key: 'bomb-1' },
+			{key: 'bomb-0' },
+			{key: 'bomb-1' },
+			{key: 'bomb-2' },
+			{key: 'bomb-1' },
 			{key: 'bomb-0' }],
 			frameRate: 2,
 			repeat: 0});
+		game.anims.create({
+			key: 'melt_block',
+			frames: [
+			{key: 'melt0' },
+			{key: 'melt1' },
+			{key: 'melt2' },
+			{key: 'melt3' },
+			{key: 'melt4' },
+			{key: 'melt5' }],
+			frameRate: 8,
+			repeat: 0});
+
 		load_player_anim()
 }
