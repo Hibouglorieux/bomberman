@@ -85,6 +85,13 @@ function load_images(scene)
 	scene.load.image('explo-1-maxright', 'anim_bombs/T_RIGHT_EXPLO_2.png');
 	scene.load.image('explo-2-maxright', 'anim_bombs/T_RIGHT_EXPLO_1.png');
 	scene.load.image('explo-3-maxright', 'anim_bombs/T_RIGHT_EXPLO_0.png');
+	scene.load.image('block', 'anim_walls/wall_block.png');
+	scene.load.image('melt0', 'anim_walls/wall_melt1.png');
+	scene.load.image('melt1', 'anim_walls/wall_melt2.png');
+	scene.load.image('melt2', 'anim_walls/wall_melt3.png');
+	scene.load.image('melt3', 'anim_walls/wall_melt4.png');
+	scene.load.image('melt4', 'anim_walls/wall_melt5.png');
+	scene.load.image('melt5', 'anim_walls/wall_melt6.png');
 	scene.load.image('bomb-0', 'items/Bomb0.png');
 	scene.load.image('bomb-1', 'items/Bomb1.png');
 	scene.load.image('bomb-2', 'items/Bomb2.png');
