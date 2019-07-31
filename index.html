@@ -2,15 +2,56 @@
 <html>
 <head>
     <script src="phaser/dist/phaser.js"></script>
-	 <script type="text/javascript" src="socket.io.js"></script>
 </head>
 <body>
-
     <script>
-	let socket = io.connect();
-	socket.on("log", (data)=>{
-		console.log("Reception du serveur ", data);
-	})
+		const GET_MY_ID = 'I'
+		const ADD_PLAYER = 'A'
+		const MOVE = 'M'
+	let id = -1;
+	let Players = {};
+	let must_add = -1;
+        let socket = new WebSocket("ws://10.1.4.4:43681/ws"); // you might want to change that to your local address, and add another redirection to 11337 port in VM dear Hubert
+        console.log("Attempting Connection...");
+        socket.onopen = () => {
+            console.log("Successfully Connected");
+            socket.send("iHi From the Client!")
+        };
+        
+        socket.onclose = event => {
+            console.log("Socket Closed Connection: ", event);
+            socket.send("Client Closed!")
+        };
+
+        socket.onerror = error => {
+            console.log("Socket Error: ", error);
+        };
+
+        socket.onmessage = function(event) {// this is the function used to tread message received throught event.data which is the string received from server
+            console.log("received a message: ", event.data);
+			if (event.data[0] == GET_MY_ID) // tells you which player you are
+			{
+				id = parseInt(event.data[2]);
+				socket.send("new".concat(id.toString()));
+			}
+			if (event.data[0] == ADD_PLAYER) // makes it pop on screen
+				must_add = parseInt(event.data[3]);
+			if (event.data[0] == MOVE)// makes other player move in real time
+			{
+				console.log(Players);
+				let nb = parseInt(event.data[3]);
+				console.log(nb);
+				if (event.data[1] == '-' && event.data[2] == 'x')
+					Players.player[nb].anim.x -= 1;
+				if (event.data[1] == '+' && event.data[2] == 'x')
+					Players.player[nb].anim.x += 1;
+				if (event.data[1] == '-' && event.data[2] == 'y')
+					Players.player[nb].anim.y -= 1;
+				if (event.data[1] == '+' && event.data[2] == 'y')
+					Players.player[nb].anim.y += 1;
+			}
+        };
+
     const level = [
         [   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
         [   1,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   1],
@@ -31,6 +72,14 @@
     {
         mur[i] = new Array(15);
     }
+	const WHITE = 0;
+	const BLACK = 1;
+	const BLUE = 2;
+	const RED = 3;
+	const UP = 0;
+	const RIGHT = 1;
+	const DOWN = 2;
+	const LEFT = 3;
     const scale = 1;
     const mvnt_liberty = 6;
     const speed = 7;
@@ -50,146 +99,82 @@
     }
 };
 
-function get_coord_x(x)
-{
-    return ((x + 0.5) * tile_size);
-}
-
-function get_coord_y_player(y)
-{
-    return ((y + 0.5 - 0.5) * tile_size);
-}
-
-function get_coord_y(y)
-{
-    return ((y + 0.5) * tile_size);
-}
-
-function get_player_hitbox(x, y)
-{
-    var hit = tile_size - scale * mvnt_liberty;
-    y += 0.5 * tile_size;
-    return [[x + hit / 2, y + hit / 2], [x - hit / 2, y + hit / 2], [x + hit / 2, y - hit / 2], [x - hit / 2, y - hit / 2]]; // 0 bottom right; 1 bottom left; 2 top right; 3 top left
-}
-
-function get_case(x_y)
-{
-    return level[Math.floor(x_y[1] / tile_size)][Math.floor(x_y[0] / tile_size)];
-}
-
 var game = new Phaser.Game(config);
 
 function preload ()
 {
+	console.log('preloading');
 	load_images(this);
-	console.log(Phaser.Scale);
 }
 
 function create ()
 {
+	console.log('creating');
      key_up = this.input.keyboard.addKey('W');
+     key_up2 = this.input.keyboard.addKey(38); // UP arrow
      key_right = this.input.keyboard.addKey('D');
+     key_right2 = this.input.keyboard.addKey(39); // RIGHT arrow
      key_bottom = this.input.keyboard.addKey('S');
+     key_bottom2 = this.input.keyboard.addKey(40); // DOWN arrow
      key_left = this.input.keyboard.addKey('A');
+     key_left2 = this.input.keyboard.addKey(37); // LEFT arrow
 	key_space = this.input.keyboard.addKey('SPACE');
 	key_p = this.input.keyboard.addKey('P');
 
     const map = this.add.image(width / 2, height / 2, 'map');
-	Players = {
-         W_player : this.add.sprite(get_coord_x(start_x), get_coord_y_player(start_y), 'w_down_0'),
-		 face : "down",
-	};
-	Players.W_player.setDepth(1);
-    create_anim();
-    for (var i = 0; i < level.length; i++) {
-        for (var j = 0; j < level[i].length; j++) {
-             if (level[i][j] == 2)
-             {
-                mur[i][j] = this.add.sprite(get_coord_x(j), get_coord_y(i), 'bomb-0');
-             }
-         } 
-    }
-	key = "";
-        create_anim();
-        // this.add.sprite(200, 200, 'explo-0-mid').play('explo_mid');
-        // this.add.sprite(184, 200, 'explo-0-midleft').play('explo_midleft');
-        // this.add.sprite(168, 200, 'explo-0-maxleft').play('explo_maxleft');
-        // this.add.sprite(200,184, 'explo-0-midtop').play('explo_midtop');
-        // this.add.sprite(200,168, 'explo-0-midtop').play('explo_midtop');
-        // this.add.sprite(200,150, 'explo-0-midtop').play('explo_midtop');
-        // this.add.sprite(200,136, 'explo-0-maxtop').play('explo_maxtop');
-        // this.add.sprite(216,200, 'explo-0-midright').play('explo_midright');
-        // this.add.sprite(230,200, 'explo-0-maxright').play('explo_maxright');
-        // this.add.sprite(200, 216, 'explo-0-middown').play('explo_middown');
-        // this.add.sprite(200, 230, 'explo-0-maxdown').play('explo_maxdown');
+	Players.player = [];
+	Players.player[0] = {
+		anim: this.add.sprite(get_coord_x(start_x), get_coord_y_player(start_y), 'w_down_0'),
+		face : DOWN};
+	Players.player[0].anim.setDepth(1); // must set to all (or not ? to discuss)
+	create_anim();
+	for (var i = 0; i < level.length; i++) {
+		for (var j = 0; j < level[i].length; j++) {
+			if (level[i][j] == 2)
+			{
+				mur[i][j] = this.add.sprite(get_coord_x(j), get_coord_y(i), 'bomb-0');
+			}
+		} 
+	}
+	create_anim();
 }
 
 let global = {bombs:[], explo:[]};
 
 function update ()
 {
-	if (key_up.isDown &&
-		 (key_bottom.isUp || key_up.repeats < key_bottom.repeats) &&
-		 (key_left.isUp || key_up.repeats < key_left.repeats) && 
-		 (key_right.isUp || key_up.repeats < key_right.repeats))
-		key = "up";
-	else if (key_right.isDown &&
-		 (key_up.isUp || key_right.repeats < key_up.repeats) && 
-		 (key_left.isUp || key_right.repeats < key_left.repeats) && 
-		 (key_bottom.isUp || key_right.repeats < key_bottom.repeats))
-		key = "right";
-	else if (key_bottom.isDown &&
-			(key_right.isUp || key_bottom.repeats < key_right.repeats) && 
-			(key_left.isUp || key_bottom.repeats < key_left.repeats) && 
-			(key_up.isUp || key_bottom.repeats < key_up.repeats))
-		key = "bottom";
-	else if (key_left.isDown &&
-			(key_bottom.isUp || key_left.repeats < key_bottom.repeats) && 
-			(key_up.isUp || key_left.repeats < key_up.repeats) && 
-			(key_right.isUp || key_left.repeats < key_right.repeats))
-		key = "left";
-	else
-		key = key;
-	if (key == "up" && key_up.isUp)
-		key = "";
-	if (key == "right" && key_right.isUp)
-		key = "";
-	if (key == "bottom" && key_bottom.isUp)
-		key = "";
-	if (key == "left" && key_left.isUp)
-		key = "";
-	movement();
+	if (must_add != -1)
+		init_id(this);
+	if (id == -1)
+		return ;
+	if (typeof Players.player[id] == 'undefined')
+		return ;
+	if (typeof update.key == 'undefined')
+		update.key = -1;
+	if (Phaser.Input.Keyboard.JustDown(key_up) || Phaser.Input.Keyboard.JustDown(key_up2))
+		update.key = UP;
+	else if (Phaser.Input.Keyboard.JustDown(key_right) || Phaser.Input.Keyboard.JustDown(key_right2))
+		update.key = RIGHT;
+	else if (Phaser.Input.Keyboard.JustDown(key_bottom) || Phaser.Input.Keyboard.JustDown(key_bottom2))
+		update.key = DOWN;
+	else if (Phaser.Input.Keyboard.JustDown(key_left) || Phaser.Input.Keyboard.JustDown(key_left2))
+		update.key = LEFT;
+	if (update.key == UP && key_up.isUp && key_up2.isUp)
+		update.key = -1;
+	if (update.key == RIGHT && key_right.isUp && key_right2.isUp)
+		update.key = -1;
+	if (update.key == DOWN && key_bottom.isUp && key_bottom2.isUp)
+		update.key = -1;
+	if (update.key == LEFT && key_left.isUp && key_left2.isUp)
+		update.key = -1;
+	movement(update.key, Players.player[id]);
 	if (key_space.isDown)
 	{
-		//let pos = {x:pixel2map(Players.W_player.x) , y:pixel2map(Players.W_player.y)};
-		let pos = player_pixel_2_map(Players.W_player);
+		let pos = player_pixel_2_map(Players.player[id].anim);
 		global.bombs.push(bomb_anim(this, pos, 3));
 	}
-	
-	  //  if (Phaser.Input.Keyboard.JustDown('p'))
-	//{
-	//if (.JustDown())
-	  if (Phaser.Input.Keyboard.JustDown(key_p))
-	    {
-		socket.emit("testGo", "test serveur");
-//		loadXMLDoc(this);
-	}
-}
 
-//function loadXMLDoc(scene) {
-//    var xmlhttp;
-//    xmlhttp=new XMLHttpRequest();
-//    xmlhttp.onreadystatechange=function()
-//    {
-//	if (xmlhttp.readyState==4 && xmlhttp.status==200)
-//	{
-//		let pos = player_pixel_2_map(Players.W_player);
-//		global.bombs.push(bomb_anim(scene, pos, 3));
-//	}
-//    }
-//    xmlhttp.open("POST","post",true);
-//    xmlhttp.send("t'es trop beau");
-//}
+}
 	</script>
 
 	<script src="create_anim.js"></script>
@@ -197,6 +182,7 @@ function update ()
 	<script src="create_bomb_anim.js"></script>
 	<script src="load_images.js"></script>
 	<script src="utils.js"></script>
-    <script src="manage_explosion.js"></script>
+	<script src="manage_explosion.js"></script>
+	<script src="init.js"></script>
 </body>
 </html>

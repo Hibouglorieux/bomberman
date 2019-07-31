@@ -46,3 +46,31 @@ function player_pixel_2_map(player)
 	}
 	return (pos);
 }
+
+function get_coord_x(x)
+{
+    return ((x + 0.5) * tile_size);
+}
+
+function get_coord_y_player(y)
+{
+    return ((y + 0.5 - 0.5) * tile_size);
+}
+
+function get_coord_y(y)
+{
+    return ((y + 0.5) * tile_size);
+}
+
+function get_player_hitbox(x, y)
+{
+    var hit = tile_size - scale * mvnt_liberty;
+    y += 0.5 * tile_size;
+    return [[x + hit / 2, y + hit / 2], [x - hit / 2, y + hit / 2], [x + hit / 2, y - hit / 2], [x - hit / 2, y - hit / 2]]; // 0 bottom right; 1 bottom left; 2 top right; 3 top left
+}
+
+function get_case(x_y)
+{
+    return level[Math.floor(x_y[1] / tile_size)][Math.floor(x_y[0] / tile_size)];
+}
+

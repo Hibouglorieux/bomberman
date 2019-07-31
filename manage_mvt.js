@@ -1,82 +1,98 @@
-function movement()
+function movement(key, player)
 {
-	if (key == "up")
-    {
-    	for (var i = 0; i < speed; i++)
-    	{
-    		Players.W_player.y -= 1;
-    		if (get_case(get_player_hitbox(Players.W_player.x, Players.W_player.y)[2]) != 0 || get_case(get_player_hitbox(Players.W_player.x, Players.W_player.y)[3]) != 0)
-    		{
-    			Players.W_player.y += 1;
-    			// break;
-    		}
-    	}
-		if (Players.W_player.face != "up" || !Players.W_player.anims.isPlaying)
-		Players.W_player.play('w_up');
-		Players.W_player.face = "up"
-    }
-	else if (key == "bottom")
-    {
-        for (var i = 0; i < speed; i++)
-    	{
-    		Players.W_player.y += 1;
-    		if (get_case(get_player_hitbox(Players.W_player.x, Players.W_player.y)[0]) != 0 || get_case(get_player_hitbox(Players.W_player.x, Players.W_player.y)[1]) != 0)
-    		{
-    			Players.W_player.y -= 1;
-    			// break;
-    		}
-    	}
-		if (Players.W_player.face != "down" || !Players.W_player.anims.isPlaying)
-		Players.W_player.play('w_down');
-		Players.W_player.face = "down"
-    }
-	else if (key == "left")
-    {
-    	for (var i = 0; i < speed; i++)
-    	{
-    		Players.W_player.x -= 1;
-    		if (get_case(get_player_hitbox(Players.W_player.x, Players.W_player.y)[3]) != 0 || get_case(get_player_hitbox(Players.W_player.x, Players.W_player.y)[1]) != 0)
-    		{
-    			Players.W_player.x += 1;
-    			// break;
-    		}
-    	}
-		if (Players.W_player.face != "left" || !Players.W_player.anims.isPlaying)
-		Players.W_player.play('w_left');
-		Players.W_player.face = "left"
-    }
-	else if (key == "right")
-    {
-        for (var i = 0; i < speed; i++)
-    	{
-    		Players.W_player.x += 1;
-    		if (get_case(get_player_hitbox(Players.W_player.x, Players.W_player.y)[2]) != 0 || get_case(get_player_hitbox(Players.W_player.x, Players.W_player.y)[0]) != 0)
-    		{
-    			Players.W_player.x -= 1;
-    			// break;
-    		}
-    	}
-		if (Players.W_player.face != "right" || !Players.W_player.anims.isPlaying)
-		Players.W_player.play('w_right');
-		Players.W_player.face = "right"
-    }
+	let prefix = "w_";
+
+	if (id == 1)
+		prefix = "b_"
+	if (id == 2)
+		prefix = "r_"
+	if (id == 3)
+		prefix = "u_"
+	if (key == UP)
+	{
+		for (var i = 0; i < speed; i++)
+		{
+			player.anim.y -= 1;
+			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0)
+			{
+				player.anim.y += 1;
+				// break;
+			}
+			else
+				socket.send("M-y")
+		}
+		if (player.face != UP || !player.anim.anims.isPlaying)
+			player.anim.play(prefix.concat("up"));
+		player.face = UP;
+	}
+	else if (key == DOWN)
+	{
+		for (var i = 0; i < speed; i++)
+		{
+			player.anim.y += 1;
+			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[0]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[1]) != 0)
+			{
+				player.anim.y -= 1;
+				// break;
+			}
+			else
+				socket.send("M+y")
+		}
+		if (player.face != DOWN || !player.anim.anims.isPlaying)
+			player.anim.play(prefix.concat("down"));
+		player.face = DOWN;
+	}
+	else if (key == LEFT)
+	{
+		for (var i = 0; i < speed; i++)
+		{
+			player.anim.x -= 1;
+			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[1]) != 0)
+			{
+				player.anim.x += 1;
+				// break;
+			}
+			else
+				socket.send("M-x")
+		}
+		if (player.face != LEFT || !player.anim.anims.isPlaying)
+			player.anim.play(prefix.concat("left"));
+		player.face = LEFT;
+	}
+	else if (key == RIGHT)
+	{
+		for (var i = 0; i < speed; i++)
+		{
+			player.anim.x += 1;
+			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[0]) != 0)
+			{
+				player.anim.x -= 1;
+				// break;
+			}
+			else
+				socket.send("M+x")
+		}
+		if (player.face != RIGHT || !player.anim.anims.isPlaying)
+			player.anim.play(prefix.concat("right"));
+		player.face = RIGHT;
+	}
 	else
 	{
-		switch (Players.W_player.face) {
-		case 'right':
-			Players.W_player.setTexture('w_right_0');
-			break;
-		case 'left':
-			Players.W_player.setTexture('w_left_0');
-			break;
-		case 'down':
-			Players.W_player.setTexture('w_down_0');
-			break;
-		case 'up':
-			Players.W_player.setTexture('w_up_0');
-			break;
-		default:
-			break;
-	}
+		switch (player.face) {
+			case RIGHT:
+				player.anim.setTexture(prefix.concat("right_0"));
+				break;
+			case LEFT:
+				player.anim.setTexture(prefix.concat("left_0"));
+				break;
+			case DOWN:
+				player.anim.setTexture(prefix.concat("down_0"));
+				break;
+			case UP:
+				player.anim.setTexture(prefix.concat("up_0"));
+				break;
+			default:
+				break;
+		}
 	}
 }

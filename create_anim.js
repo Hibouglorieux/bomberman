@@ -36,6 +36,117 @@
 			{ key: 'w_right_0' }],
 			frameRate: 10,
 			repeat: 0});
+
+		game.anims.create({
+			key: 'b_up',
+			frames: [
+			{ key: 'b_up_1' },
+			{ key: 'b_up_0' },
+			{ key: 'b_up_2' },
+			{ key: 'b_up_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'b_down',
+			frames: [
+			{ key: 'b_down_1' },
+			{ key: 'b_down_0' },
+			{ key: 'b_down_2' },
+			{ key: 'b_down_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'b_left',
+			frames: [
+			{ key: 'b_left_1' },
+			{ key: 'b_left_0' },
+			{ key: 'b_left_2' },
+			{ key: 'b_left_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'b_right',
+			frames: [
+			{ key: 'b_right_1' },
+			{ key: 'b_right_0' },
+			{ key: 'b_right_2' },
+			{ key: 'b_right_0' }],
+			frameRate: 10,
+			repeat: 0});
+
+		game.anims.create({
+			key: 'u_up',
+			frames: [
+			{ key: 'u_up_1' },
+			{ key: 'u_up_0' },
+			{ key: 'u_up_2' },
+			{ key: 'u_up_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'u_down',
+			frames: [
+			{ key: 'u_down_1' },
+			{ key: 'u_down_0' },
+			{ key: 'u_down_2' },
+			{ key: 'u_down_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'u_left',
+			frames: [
+			{ key: 'u_left_1' },
+			{ key: 'u_left_0' },
+			{ key: 'u_left_2' },
+			{ key: 'u_left_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'u_right',
+			frames: [
+			{ key: 'u_right_1' },
+			{ key: 'u_right_0' },
+			{ key: 'u_right_2' },
+			{ key: 'u_right_0' }],
+			frameRate: 10,
+			repeat: 0});
+
+		game.anims.create({
+			key: 'r_up',
+			frames: [
+			{ key: 'r_up_1' },
+			{ key: 'r_up_0' },
+			{ key: 'r_up_2' },
+			{ key: 'r_up_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'r_down',
+			frames: [
+			{ key: 'r_down_1' },
+			{ key: 'r_down_0' },
+			{ key: 'r_down_2' },
+			{ key: 'r_down_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'r_left',
+			frames: [
+			{ key: 'r_left_1' },
+			{ key: 'r_left_0' },
+			{ key: 'r_left_2' },
+			{ key: 'r_left_0' }],
+			frameRate: 10,
+			repeat: 0});
+		game.anims.create({
+			key: 'r_right',
+			frames: [
+			{ key: 'r_right_1' },
+			{ key: 'r_right_0' },
+			{ key: 'r_right_2' },
+			{ key: 'r_right_0' }],
+			frameRate: 10,
+			repeat: 0});
 }
 	function create_anim()
 {
