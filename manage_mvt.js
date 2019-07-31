@@ -19,7 +19,7 @@ function movement(key, player)
 				// break;
 			}
 			else
-				socket.send("My".concat(player.anim.x.toString()));
+				socket.send("My".concat(player.anim.y.toString()));
 		}
 		if (player.face != UP || !player.anim.anims.isPlaying)
 			player.anim.play(prefix.concat("up"));
@@ -36,7 +36,7 @@ function movement(key, player)
 				// break;
 			}
 			else
-				socket.send("My".concat(player.anim.x.toString()));
+				socket.send("My".concat(player.anim.y.toString()));
 		}
 		if (player.face != DOWN || !player.anim.anims.isPlaying)
 			player.anim.play(prefix.concat("down"));
