@@ -68,7 +68,7 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 			send_all("Add" + string(p)[3:])
 		}
 		if (string(p)[0] == MOVEMENT) {
-			send_all_but_self(string(p) + strconv.Itoa(id), id)
+			send_all_but_self(string(p)[0:2] + strconv.Itoa(id) + string(p)[2:], id)
 		}
 		if err := conn.WriteMessage(messageType, []byte(new_msg)); err != nil { // writes in message, if error removes client from Clients
 			for k, elem := range Clients{
