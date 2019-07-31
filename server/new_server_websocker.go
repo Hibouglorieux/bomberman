@@ -10,21 +10,21 @@ import (
 
 const ID_REQ = 'i'
 const NEW_ID = 'n'
-const MOVEMENT = 'M'
+const MOVEMENT = 'M' //easier to read to detect messages and reduce size of packages
 
-var Clients []*websocket.Conn
+var Clients []*websocket.Conn // global with all clients registered
 
-var upgrader = websocket.Upgrader{
+var upgrader = websocket.Upgrader{ // this sets the parameters for websockets
     ReadBufferSize:  1024,
     WriteBufferSize: 1024,
 }
 
-func	treated_string(str string) string{ // UNUSED FOR NOW
-	if (str[0] == ID_REQ) {
-		return ""
-	}
-	return ""
-}
+//func	treated_string(str string) string{ // UNUSED FOR NOW
+//	if (str[0] == ID_REQ) {
+//		return ""
+//	}
+//	return ""
+//}
 
 func	send_all(str string) {
 
@@ -33,16 +33,16 @@ func	send_all(str string) {
 	}
 }
 
-func	send_all_but_self(msg []byte, id_of_self int) {
+func	send_all_but_self(str string, id_of_self int) {
 
 	for id, elem := range Clients{
 		if (id != id_of_self){
-			elem.WriteMessage(1, msg)
+			elem.WriteMessage(1, []byte(str))
 		}
 	}
 }
 
-func reader(conn *websocket.Conn) {
+func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever something is interesting you can answer to client or all client with .WriteMessage method
 	Clients = append(Clients, conn)
 	var id int;
 	for k, elem := range Clients{
@@ -53,15 +53,13 @@ func reader(conn *websocket.Conn) {
 	}
 	for {
 		var new_msg string;
-		// read in a message
-		messageType, p, err := conn.ReadMessage()
+		messageType, p, err := conn.ReadMessage() // read in a message
 		if err != nil {
 			log.Println(err)
 			return
 		}
-		fmt.Println(messageType)
-		// print out that message for clarity
-		fmt.Println(string(p))
+
+		fmt.Println(string(p)) // print out the message received for clarity / debug
 
 		if (string(p)[0] == ID_REQ) {
 			new_msg = "ID" + strconv.Itoa(id)
@@ -70,9 +68,9 @@ func reader(conn *websocket.Conn) {
 			send_all("Add" + string(p)[3:])
 		}
 		if (string(p)[0] == MOVEMENT) {
-			send_all_but_self([]byte(string(p) + strconv.Itoa(id)), id)
+			send_all_but_self(string(p) + strconv.Itoa(id), id)
 		}
-		if err := conn.WriteMessage(messageType, []byte(new_msg)); err != nil {
+		if err := conn.WriteMessage(messageType, []byte(new_msg)); err != nil { // writes in message, if error removes client from Clients
 			for k, elem := range Clients{
 				if (elem == conn) {
 					Clients[k] = Clients[len(Clients) - 1]
@@ -87,9 +85,8 @@ func reader(conn *websocket.Conn) {
 	}
 }
 
-func wsEndpoint(w http.ResponseWriter, r *http.Request) {
-	// remove the previous fmt statement
-	// fmt.Fprintf(w, "Hello World")
+func wsEndpoint(w http.ResponseWriter, r *http.Request) { // javascript code connects there with its websocket and launchs a goroutine on 'reader' which never ends until the connection is closed
+
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
