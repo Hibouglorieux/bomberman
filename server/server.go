@@ -103,6 +103,7 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) { // javascript code con
 	}
 	reader(ws)
 }
+//this is a test
 
 func setupRoutes() {
 	http.HandleFunc("/ws", wsEndpoint)
