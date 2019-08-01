@@ -86,7 +86,7 @@ function load_images(scene)
 	scene.load.image('explo-2-maxright', 'anim_bombs/T_RIGHT_EXPLO_1.png');
 	scene.load.image('explo-3-maxright', 'anim_bombs/T_RIGHT_EXPLO_0.png');
 	scene.load.image('block', 'anim_walls/wall.png');
-	scene.load.image('vert', 'anim_wall/grass.png);
+	scene.load.image('vert', 'anim_wall/grass.png');
 	scene.load.image('incassable', 'anim_wall/middle_block.png');
 	scene.load.image('melt0', 'anim_walls/block_melt0.png');
 	scene.load.image('melt1', 'anim_walls/block_melt1.png');
