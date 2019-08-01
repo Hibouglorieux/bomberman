@@ -1,7 +1,24 @@
+function	add_new_bomb(scene, data)
+{
+	let x = parseInt(data[1]);
+	let y = parseInt(data[2]);
+	let bomb = {pos:{x:x, y:y}, length:parseInt(data[3]), mine:false};
+
+	bomb.anim = scene.add.sprite(map2pixel(x), map2pixel(y), 'bomb-0').play('bomb-anim-0');
+
+	bomb.anim.once('animationcomplete', () => {
+		explosion_anim(scene, bomb.pos, bomb.length, false);
+		global.bombs.splice(global.bombs.indexOf(bomb), 1);
+		bomb.anim.destroy();
+		delete bomb;
+		});
+}
+
 function	bomb_anim(scene, pos, length, mine)
 {
 	let bomb = {pos:{x:pos.x, y:pos.y}, length:length, mine:mine};
 
+	socket.send("B:".concat(pos.x.toString(), ":", pos.y.toString(), ":", length.toString()));
 	bomb.anim = scene.add.sprite(map2pixel(pos.x), map2pixel(pos.y), 'bomb-0').play('bomb-anim-0');
 	
 	bomb.anim.once('animationcomplete', () => {
@@ -17,7 +34,7 @@ function	explosion_anim(scene, pos, length, mine)
 {
 	let x = pos.x;
 	let y = pos.y;
-	let explo = {anim:[scene.add.sprite(map2pixel(x), map2pixel(y), 'explo-0-mid').play('explo_mid')], lenght:length, mine:mine};
+	let explo = {anim:[scene.add.sprite(map2pixel(x), map2pixel(y), 'explo-0-mid').play('explo_mid')], mine:mine};
 
 	explo.mid_x = x;
 	explo.mid_y = y;
@@ -84,7 +101,7 @@ function	explosion_anim(scene, pos, length, mine)
 			explo.anim.push(scene.add.sprite(pixel_x, map2pixel(y), 'explo-0-maxdown').play('explo_maxdown'));
 		y++;
 	}
-	explo.max = y;
+	explo.max_y = y;
 	// to finish
 	global.explo.push(explo);
 	explo.anim[0].once('animationcomplete', () => {

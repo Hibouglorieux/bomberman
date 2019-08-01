@@ -9,7 +9,9 @@ import (
 )
 
 const ID_REQ = 'i'
+const BOMB = 'B'
 const NEW_ID = 'n'
+const BLOCK_DESTROYED = 'b'
 const MOVEMENT = 'M' //easier to read to detect messages and reduce size of packages
 
 var Clients []*websocket.Conn // global with all clients registered
@@ -60,20 +62,27 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 		var new_msg string = "";
 		messageType, p, err := conn.ReadMessage() // read in a message
 		if err != nil {
+			remove_client(id)
 			log.Println(err)
 			return
 		}
 
 		fmt.Println(string(p)) // print out the message received for clarity / debug
 
+		if (string(p)[0] == BLOCK_DESTROYED || string(p)[0] == BOMB){
+			send_all(string(p));
+			continue ;
+		}
 		if (string(p)[0] == ID_REQ) {
 			new_msg = "ID" + strconv.Itoa(id)
 		}
 		if (string(p)[0] == NEW_ID) {
 			send_all("Add" + string(p)[3:])
+			continue ;
 		}
 		if (string(p)[0] == MOVEMENT) {
 			send_all_but_self(string(p)[0:2] + strconv.Itoa(id) + string(p)[2:], id)
+			continue ;
 		}
 		if (new_msg != ""){
 			if err := conn.WriteMessage(messageType, []byte(new_msg)); err != nil { // writes in message, if error removes client from Clients

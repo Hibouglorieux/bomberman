@@ -5,12 +5,14 @@
 </head>
 <body>
     <script>
-		const GET_MY_ID = 'I'
-		const ADD_PLAYER = 'A'
-		const MOVE = 'M'
+		const GET_MY_ID = 'I';
+		const ADD_PLAYER = 'A';
+		const MOVE = 'M';
+		const MELT = "b";
+		const BOMB = "B";
 	let id = -1;
+	let dascene = this;
 	let Players = {};
-	let must_add = [];
         let socket = new WebSocket("ws://10.1.4.4:43681/ws"); // you might want to change that to your local address, and add another redirection to 11337 port in VM dear Hubert
         console.log("Attempting Connection...");
         socket.onopen = () => {
@@ -34,12 +36,12 @@
 				id = parseInt(event.data[2]);
 				socket.send("new".concat(id.toString()));
 				if (id >= 2)
-					must_add.push(1);
+					init_id(dascene, 1);
 				if (id == 3)
-					must_add.push(2);
+					init_id(dascene, 2);
 			}
 			if (event.data[0] == ADD_PLAYER) // makes it pop on screen
-				must_add.push(parseInt(event.data[3]));
+				init_id(dascene, parseInt(event.data[3]));
 			if (event.data[0] == MOVE)// makes other player move in real time
 			{
 				let nb = event.data[2].charCodeAt() - 48;
@@ -53,9 +55,21 @@
 				if (event.data[1] == 'y')
 					Players.player[nb].anim.y = nb2;
 			}
+			if (event.data[0] == MELT)
+			{
+				let str = event.data.split(":");
+
+				mur[parseInt(str[2])][parseInt(str[1])].play('melt_block');
+				mur[parseInt(str[2])][parseInt(str[1])].once('animationcomplete', () =>{
+				mur[parseInt(str[2])][parseInt(str[1])].setTexture('vert');
+				level[parseInt(str[2])][parseInt(str[1])]= 0; // make an array of powerup ?
+				});
+			}
+			if (event.data[0] == BOMB)
+				add_new_bomb(dascene, event.data.split(":"));
         };
 
-    const level = [
+    let level = [
         [   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
         [   1,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   1],
         [   1,   0,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   0,   1],
@@ -112,6 +126,7 @@ function preload ()
 
 function create ()
 {
+	dascene = this;
 	console.log('creating');
      key_up = this.input.keyboard.addKey('W');
      key_up2 = this.input.keyboard.addKey(38); // UP arrow
@@ -128,7 +143,8 @@ function create ()
 	Players.player = [];
 	Players.player[0] = {
 		anim: this.add.sprite(get_coord_x(start_x), get_coord_y_player(start_y), 'w_down_0'),
-		face : DOWN};
+		face: DOWN,
+		id: 0};
 	Players.player[0].anim.setDepth(1); // must set to all (or not ? to discuss)
 	create_anim();
 	for (var i = 0; i < level.length; i++) {
@@ -151,8 +167,6 @@ let global = {bombs:[], explo:[]};
 
 function update ()
 {
-	if (must_add.length != 0)
-		init_id(this);
 	if (id == -1)
 		return ;
 	if (typeof Players.player[id] == 'undefined')
@@ -181,10 +195,13 @@ function update ()
 		let pos = player_pixel_2_map(Players.player[id].anim);
 		global.bombs.push(bomb_anim(this, pos, 3, true));
 	}
+	//si probleme de perf faire ce foreach toutes les X frames a la place
 	global.explo.forEach(function(element) {
 		if (element.mine)
 		{
-			handle_continuous_explosion(element.cases);
+			handle_continuous_explosion(element.min_x, element.min_y,
+				element.mid_x, element.mid_y,
+				element.max_x, element.max_y);
 		}
 	});
 }
