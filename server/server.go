@@ -12,6 +12,7 @@ const ID_REQ = 'i'
 const BOMB = 'B'
 const NEW_ID = 'n'
 const BLOCK_DESTROYED = 'b'
+const CHAIN_EXPLOSION = 'E'
 const MOVEMENT = 'M' //easier to read to detect messages and reduce size of packages
 
 var Clients []*websocket.Conn // global with all clients registered
@@ -69,8 +70,12 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 
 		fmt.Println(string(p)) // print out the message received for clarity / debug
 
-		if (string(p)[0] == BLOCK_DESTROYED || string(p)[0] == BOMB){
-			send_all(string(p));
+		if (string(p)[0] == BOMB){
+			send_all_but_self(string(p), id);
+			continue ;
+		}
+		if (string(p)[0] == BLOCK_DESTROYED || string(p)[0] == CHAIN_EXPLOSION){
+			send_all_but_self(string(p), id);
 			continue ;
 		}
 		if (string(p)[0] == ID_REQ) {

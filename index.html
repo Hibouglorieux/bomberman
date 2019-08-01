@@ -10,64 +10,11 @@
 		const MOVE = 'M';
 		const MELT = "b";
 		const BOMB = "B";
+		const CHAIN_EXPLOSION = "E";
 	let id = -1;
 	let dascene = this;
 	let Players = {};
-        let socket = new WebSocket("ws://10.1.4.4:43681/ws"); // you might want to change that to your local address, and add another redirection to 11337 port in VM dear Hubert
-        console.log("Attempting Connection...");
-        socket.onopen = () => {
-            console.log("Successfully Connected");
-            socket.send("iHi From the Client!")
-        };
-        
-        socket.onclose = event => {
-            console.log("Socket Closed Connection: ", event);
-            socket.send("Client Closed!")
-        };
-
-        socket.onerror = error => {
-            console.log("Socket Error: ", error);
-        };
-
-        socket.onmessage = function(event) {// this is the function used to tread message received throught event.data which is the string received from server
-            console.log("received a message: ", event.data);
-			if (event.data[0] == GET_MY_ID) // tells you which player you are
-			{
-				id = parseInt(event.data[2]);
-				socket.send("new".concat(id.toString()));
-				if (id >= 2)
-					init_id(dascene, 1);
-				if (id == 3)
-					init_id(dascene, 2);
-			}
-			if (event.data[0] == ADD_PLAYER) // makes it pop on screen
-				init_id(dascene, parseInt(event.data[3]));
-			if (event.data[0] == MOVE)// makes other player move in real time
-			{
-				let nb = event.data[2].charCodeAt() - 48;
-				console.log(typeof nb, nb);
-				console.log(Players);
-				if (typeof Players.player[nb] == 'undefined' || typeof Players.player[nb] == 'undefined')
-					return ;
-				let nb2 = parseInt(event.data.slice(3));
-				if (event.data[1] == 'x')
-					Players.player[nb].anim.x = nb2;
-				if (event.data[1] == 'y')
-					Players.player[nb].anim.y = nb2;
-			}
-			if (event.data[0] == MELT)
-			{
-				let str = event.data.split(":");
-
-				mur[parseInt(str[2])][parseInt(str[1])].play('melt_block');
-				mur[parseInt(str[2])][parseInt(str[1])].once('animationcomplete', () =>{
-				mur[parseInt(str[2])][parseInt(str[1])].setTexture('vert');
-				level[parseInt(str[2])][parseInt(str[1])]= 0; // make an array of powerup ?
-				});
-			}
-			if (event.data[0] == BOMB)
-				add_new_bomb(dascene, event.data.split(":"));
-        };
+	let socket;
 
     let level = [
         [   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
@@ -120,13 +67,14 @@ var game = new Phaser.Game(config);
 
 function preload ()
 {
+	dascene = this;
+	Players.player = [];
 	console.log('preloading');
 	load_images(this);
 }
 
 function create ()
 {
-	dascene = this;
 	console.log('creating');
      key_up = this.input.keyboard.addKey('W');
      key_up2 = this.input.keyboard.addKey(38); // UP arrow
@@ -140,7 +88,6 @@ function create ()
 	key_p = this.input.keyboard.addKey('P');
 
     //const map = this.add.image(width / 2, height / 2, 'map');
-	Players.player = [];
 	Players.player[0] = {
 		anim: this.add.sprite(get_coord_x(start_x), get_coord_y_player(start_y), 'w_down_0'),
 		face: DOWN,
@@ -161,6 +108,7 @@ function create ()
 		} 
 	}
 	create_anim();
+	init_socket();
 }
 
 let global = {bombs:[], explo:[]};
@@ -189,11 +137,25 @@ function update ()
 		update.key = -1;
 	if (update.key == LEFT && key_left.isUp && key_left2.isUp)
 		update.key = -1;
+	if (update.key == -1)
+	{
+		if (key_up.isDown || key_up2.isDown)
+			update.key = UP;
+		else if (key_right.isDown || key_right2.isDown)
+			update.key = RIGHT;
+		else if (key_bottom.isDown || key_bottom2.isDown)
+			update.key = DOWN;
+		else if (key_left.isDown || key_left2.isDown)
+			update.key = LEFT;
+	}
 	movement(update.key, Players.player[id]);
 	if (Phaser.Input.Keyboard.JustDown(key_space))
 	{
 		let pos = player_pixel_2_map(Players.player[id].anim);
-		global.bombs.push(bomb_anim(this, pos, 3, true));
+		let ret = add_new_bomb(this, pos, 3, true);
+		if (typeof ret != 'undefined')
+			global.bombs.push(ret);
+		//global.bombs.push(add_new_bomb(this, pos, 3, true));
 	}
 	//si probleme de perf faire ce foreach toutes les X frames a la place
 	global.explo.forEach(function(element) {
@@ -215,5 +177,6 @@ function update ()
 	<script src="manage_explosion.js"></script>
 	<script src="init.js"></script>
 	<script src="handle_explosion.js"></script>
+	<script src="socket_stuff.js"></script>
 </body>
 </html>

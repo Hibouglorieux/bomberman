@@ -1,26 +1,15 @@
-function	add_new_bomb(scene, data)
+function	add_new_bomb(scene, pos, length, mine)
 {
-	let x = parseInt(data[1]);
-	let y = parseInt(data[2]);
-	let bomb = {pos:{x:x, y:y}, length:parseInt(data[3]), mine:false};
+	if (mine && level[pos.y][pos.x] == 3)
+		return ;
+	if (mine)
+		socket.send("B:".concat(pos.x.toString(), ":", pos.y.toString(), ":", length.toString()));
 
-	bomb.anim = scene.add.sprite(map2pixel(x), map2pixel(y), 'bomb-0').play('bomb-anim-0');
-
-	bomb.anim.once('animationcomplete', () => {
-		explosion_anim(scene, bomb.pos, bomb.length, false);
-		global.bombs.splice(global.bombs.indexOf(bomb), 1);
-		bomb.anim.destroy();
-		delete bomb;
-		});
-}
-
-function	bomb_anim(scene, pos, length, mine)
-{
 	let bomb = {pos:{x:pos.x, y:pos.y}, length:length, mine:mine};
 
-	socket.send("B:".concat(pos.x.toString(), ":", pos.y.toString(), ":", length.toString()));
 	bomb.anim = scene.add.sprite(map2pixel(pos.x), map2pixel(pos.y), 'bomb-0').play('bomb-anim-0');
 	
+	level[pos.y][pos.x] = 3;
 	bomb.anim.once('animationcomplete', () => {
 		explosion_anim(scene, bomb.pos, bomb.length, mine);
 		global.bombs.splice(global.bombs.indexOf(bomb), 1);
@@ -36,12 +25,13 @@ function	explosion_anim(scene, pos, length, mine)
 	let y = pos.y;
 	let explo = {anim:[scene.add.sprite(map2pixel(x), map2pixel(y), 'explo-0-mid').play('explo_mid')], mine:mine};
 
+	level[pos.y][pos.x] = 0;
 	explo.mid_x = x;
 	explo.mid_y = y;
 	x--;
-	while (pos.x - x <= length && x >= 0)
+	while (pos.x - x <= length && x > 0)
 	{
-		if (check_case_explosion(x, y))
+		if (check_case_explosion(x, y, mine))
 		{
 			x--;
 			break;
@@ -55,9 +45,9 @@ function	explosion_anim(scene, pos, length, mine)
 	}
 	explo.min_x = x;
 	x = pos.x + 1;
-	while (x - pos.x <= length && x < 15)
+	while (x - pos.x <= length && x < 14)
 	{
-		if (check_case_explosion(x, y))
+		if (check_case_explosion(x, y, mine))
 		{
 			x++
 			break;
@@ -73,9 +63,9 @@ function	explosion_anim(scene, pos, length, mine)
 	let pixel_x = map2pixel(pos.x);
 	y--;
 	x = pos.x;
-	while (pos.y - y <= length && y >= 0)
+	while (pos.y - y <= length && y > 0)
 	{
-		if (check_case_explosion(x, y))
+		if (check_case_explosion(x, y, mine))
 		{
 			y--;
 			break;
@@ -88,9 +78,9 @@ function	explosion_anim(scene, pos, length, mine)
 	}
 	explo.min_y = y;
 	y = pos.y + 1;
-	while (y - pos.y <= length && y < 13)
+	while (y - pos.y <= length && y < 12)
 	{
-		if (check_case_explosion(x, y))
+		if (check_case_explosion(x, y, mine))
 		{
 			y++;
 			break;
