@@ -47,8 +47,12 @@ function init_socket()
 			let str = event.data.split(":");
 
 			mur[parseInt(str[2])][parseInt(str[1])].play('melt_block');
+			mur[parseInt(str[2])][parseInt(str[1])].power_up_inc = parseInt(str[3]);
 			mur[parseInt(str[2])][parseInt(str[1])].once('animationcomplete', () =>{
-				mur[parseInt(str[2])][parseInt(str[1])].setTexture('vert');
+				if (parseInt(str[3]) == 0)
+					mur[parseInt(str[2])][parseInt(str[1])].setTexture('vert');
+				//else
+				//	mur[parseInt(str[2])][parseInt(str[1])].setTexture(get_power_up_texture(parseInt(str[3])));
 				level[parseInt(str[2])][parseInt(str[1])]= 0; // make an array of powerup ?
 			});
 		}

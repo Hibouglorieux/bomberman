@@ -50,6 +50,15 @@ func	remove_client(index int){
 	Clients = append(Clients[:index], Clients[index+1:]...)
 }
 
+func	get_a_new_powerup(str string) string{
+
+	var powerup int;
+
+	powerup = 0;//search array in random
+
+	return str + ":" + strconv.Itoa(powerup)
+}
+
 func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever something is interesting you can answer to client or all client with .WriteMessage method
 	Clients = append(Clients, conn)
 	var id int;
@@ -74,8 +83,12 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 			send_all_but_self(string(p), id);
 			continue ;
 		}
-		if (string(p)[0] == BLOCK_DESTROYED || string(p)[0] == CHAIN_EXPLOSION){
+		if (string(p)[0] == CHAIN_EXPLOSION){
 			send_all_but_self(string(p), id);
+			continue ;
+		}
+		if (string(p)[0] == BLOCK_DESTROYED){
+			send_all_but_self(get_a_new_powerup(string(p)), id)
 			continue ;
 		}
 		if (string(p)[0] == ID_REQ) {
