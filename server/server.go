@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
-    "log"
+	"fmt"
+	"log"
 	"strconv"
-    "net/http"
+	"net/http"
 	"github.com/gorilla/websocket"
 )
 
@@ -16,11 +16,15 @@ const BLOCK_DESTROYED = 'b'
 const CHAIN_EXPLOSION = 'E'
 const MOVEMENT = 'M' //easier to read to detect messages and reduce size of packages
 
-var Clients []*websocket.Conn // global with all clients registered
+type clts struct{
+	id int
+	conn *websocket.Conn
+}
+var Clients []clts // global with all clients registered
 
 var upgrader = websocket.Upgrader{ // this sets the parameters for websockets
-    ReadBufferSize:  1024,
-    WriteBufferSize: 1024,
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 }
 
 //func	treated_string(str string) string{ // UNUSED FOR NOW
@@ -33,22 +37,17 @@ var upgrader = websocket.Upgrader{ // this sets the parameters for websockets
 func	send_all(str string) {
 
 	for _, elem := range Clients {
-		elem.WriteMessage(1, []byte(str));
+			elem.conn.WriteMessage(1, []byte(str));
 	}
 }
 
 func	send_all_but_self(str string, id_of_self int) {
 
-	for id, elem := range Clients{
-		if (id != id_of_self){
-			fmt.Println("send to: ", id, "\nmessage: ", str)
-			elem.WriteMessage(1, []byte(str))
+	for _, elem := range Clients{
+		if (elem.id != id_of_self){
+			elem.conn.WriteMessage(1, []byte(str))
 		}
 	}
-}
-
-func	remove_client(index int){
-	Clients = append(Clients[:index], Clients[index+1:]...)
 }
 
 func	get_a_new_powerup(str string) string{
@@ -60,15 +59,39 @@ func	get_a_new_powerup(str string) string{
 	return str + ":" + strconv.Itoa(powerup)
 }
 
-func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever something is interesting you can answer to client or all client with .WriteMessage method
-	Clients = append(Clients, conn)
-	var id int;
-	for k, elem := range Clients{
-		if (elem == conn) {
-			id = k
-			break
+func set_id (id int) int {
+	for _, elem := range Clients{
+		if (elem.id == id){
+			return (set_id(id + 1))
 		}
 	}
+	return (id)
+}
+
+func remove_client(id int) {
+	var key int
+	for k, elem := range Clients{
+		if (elem.id == id){
+			key = k
+		}
+	}
+	Clients[key] = Clients[len(Clients)-1]
+	Clients = Clients[:len(Clients) - 1]
+}
+
+func	add_all_players(conn *websocket.Conn, id int) {
+	for _, elem := range Clients{
+		if (elem.id != id){
+			conn.WriteMessage(1, []byte("Add" + strconv.Itoa(elem.id)))
+		}
+	}
+	conn.WriteMessage(1, []byte("ID" + strconv.Itoa(id)))
+}
+
+func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever something is interesting you can answer to client or all client with .WriteMessage method
+	var id int
+	id = set_id(0)
+	Clients = append(Clients, clts{id, conn})
 	for {
 		var new_msg string = "";
 		messageType, p, err := conn.ReadMessage() // read in a message
@@ -77,8 +100,9 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 			log.Println(err)
 			return
 		}
-
-		fmt.Println(string(p)) // print out the message received for clarity / debug
+		if (string(p)[0] != MOVEMENT){
+			fmt.Println(string(p)) // print out the message received for clarity / debug
+		}
 
 		if (string(p)[0] == BOMB){
 			send_all_but_self(string(p), id);
@@ -93,7 +117,8 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 			continue ;
 		}
 		if (string(p)[0] == ID_REQ) {
-			new_msg = "ID" + strconv.Itoa(id)
+			add_all_players(conn, id)
+			continue ;
 		}
 		if (string(p)[0] == NEW_ID) {
 			send_all("Add" + string(p)[3:])
@@ -132,7 +157,6 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) { // javascript code con
 	}
 	reader(ws)
 }
-//this is a test
 
 func setupRoutes() {
 	http.HandleFunc("/ws", wsEndpoint)

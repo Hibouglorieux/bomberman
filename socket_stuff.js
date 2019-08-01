@@ -30,7 +30,7 @@ function init_socket()
 		{
 			id = parseInt(event.data[2]);
 			socket.send("new".concat(id.toString()));
-			if (id > 2)
+			if (id >= 2)
 				init_id(dascene, 1);
 			if (id == 3)
 				init_id(dascene, 2);

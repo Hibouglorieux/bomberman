@@ -12,7 +12,6 @@ function	init_id(scene, id)
 			id: 1,
 			isdead:false
 		};
-		init_id.done = 1;
 	}
 	if (id == 2)
 	{
@@ -24,7 +23,6 @@ function	init_id(scene, id)
 			id: 2,
 			isdead: false
 		};
-		init_id.done = 2;
 	}
 	if (id == 3)
 	{
@@ -36,6 +34,5 @@ function	init_id(scene, id)
 			id: 3,
 			isdead: false
 		};
-		init_id.done = 3;
 	}
 }
