@@ -37,6 +37,17 @@ function	load_player_anim()
 			{ key: 'w_right_0' }],
 		frameRate: 10,
 		repeat: 0});
+	game.anims.create({
+		key: 'w_death',
+		frames: [
+			{ key: 'w_death_0' },
+			{ key: 'w_death_1' },
+			{ key: 'w_death_2' },
+			{ key: 'w_death_3' },
+			{ key: 'w_death_4' },
+			{ key: 'w_death_5' }],
+		frameRate:6,
+		repeat: 0});
 
 	game.anims.create({
 		key: 'b_up',
@@ -73,6 +84,17 @@ function	load_player_anim()
 			{ key: 'b_right_2' },
 			{ key: 'b_right_0' }],
 		frameRate: 10,
+		repeat: 0});
+	game.anims.create({
+		key:'b_death',
+		frames: [
+			{ key: 'b_death_0' },
+			{ key: 'b_death_1' },
+			{ key: 'b_death_2' },
+			{ key: 'b_death_3' },
+			{ key: 'b_death_4' },
+			{ key: 'b_death_5' }],
+		frameRate:6,
 		repeat: 0});
 
 	game.anims.create({
@@ -111,6 +133,17 @@ function	load_player_anim()
 			{ key: 'u_right_0' }],
 		frameRate: 10,
 		repeat: 0});
+	game.anims.create({
+		key:'u_death',
+		frames: [
+			{ key: 'u_death_0' },
+			{ key: 'u_death_1' },
+			{ key: 'u_death_2' },
+			{ key: 'u_death_3' },
+			{ key: 'u_death_4' },
+			{ key: 'u_death_5' }],
+		frameRate:6,
+		repeat: 0});
 
 	game.anims.create({
 		key: 'r_up',
@@ -147,6 +180,17 @@ function	load_player_anim()
 			{ key: 'r_right_2' },
 			{ key: 'r_right_0' }],
 		frameRate: 10,
+		repeat: 0});
+	game.anims.create({
+		key:'r_death',
+		frames: [
+			{ key: 'r_death_0' },
+			{ key: 'r_death_1' },
+			{ key: 'r_death_2' },
+			{ key: 'r_death_3' },
+			{ key: 'r_death_4' },
+			{ key: 'r_death_5' }],
+		frameRate:6,
 		repeat: 0});
 }
 function create_anim()

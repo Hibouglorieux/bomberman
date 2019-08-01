@@ -9,7 +9,9 @@ function	init_id(scene, id)
 		Players.player[1] = {
 			anim:scene.add.sprite(get_coord_x(13), get_coord_y_player(11), 'b_down_0'),
 			face: DOWN,
-			id: 1};
+			id: 1,
+			isdead:false
+		};
 		init_id.done = 1;
 	}
 	if (id == 2)
@@ -19,7 +21,9 @@ function	init_id(scene, id)
 		Players.player[2] = {
 			anim:scene.add.sprite(get_coord_x(13), get_coord_y_player(1), 'r_down_0'),
 			face: DOWN,
-			id: 2};
+			id: 2,
+			isdead: false
+		};
 		init_id.done = 2;
 	}
 	if (id == 3)
@@ -29,7 +33,9 @@ function	init_id(scene, id)
 		Players.player[3] = {
 			anim:scene.add.sprite(get_coord_x(1), get_coord_y_player(11), 'u_down_0'),
 			face: DOWN,
-			id: 3};
+			id: 3,
+			isdead: false
+		};
 		init_id.done = 3;
 	}
 }

@@ -1,3 +1,11 @@
+const GET_MY_ID = 'I';
+const ADD_PLAYER = 'A';
+const MOVE = 'M';
+const MELT = "b";
+const BOMB = "B";
+const CHAIN_EXPLOSION = "E";
+const DEATH = 'D'
+
 function init_socket()
 {
 	socket = new WebSocket("ws://10.1.4.4:43681/ws"); // you might want to change that to your local address, and add another redirection to 11337 port in VM dear Hubert
@@ -32,9 +40,8 @@ function init_socket()
 		if (event.data[0] == MOVE)// makes other player move in real time
 		{
 			let nb = event.data[2].charCodeAt() - 48;
-			console.log(typeof nb, nb);
-			console.log(Players);
-			if (typeof Players.player[nb] == 'undefined' || typeof Players.player[nb] == 'undefined')
+			if (typeof Players.player[nb] == 'undefined' || typeof Players.player[nb] == 'undefined' ||
+			Players.player[nb].isdead == true)
 				return ;
 			let nb2 = parseInt(event.data.slice(3));
 			let prefix = set_prefix(nb);
@@ -97,6 +104,15 @@ function init_socket()
 			console.debug(global.bombs);
 			console.debug(event.data);
 			make_a_bomb_explode(parseInt(str[1]), parseInt(str[2]))
+		}
+		if (event.data[0] == DEATH)
+		{
+			let nb = parseInt(event.data[1]);
+			Players.player[nb].anim.play(set_prefix(nb).concat('death'));
+			//Players.player[nb].anim.once('animationcomplete', () =>{ 
+				//Players.player[nb].anim.destroy();
+			//});
+			Players.player[nb].isdead = true;
 		}
 	};
 }

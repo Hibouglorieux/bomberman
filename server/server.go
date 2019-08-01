@@ -9,6 +9,7 @@ import (
 )
 
 const ID_REQ = 'i'
+const DEATH = 'D'
 const BOMB = 'B'
 const NEW_ID = 'n'
 const BLOCK_DESTROYED = 'b'
@@ -96,6 +97,10 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 		}
 		if (string(p)[0] == NEW_ID) {
 			send_all("Add" + string(p)[3:])
+			continue ;
+		}
+		if (string(p)[0] == DEATH){
+			send_all(string(p));
 			continue ;
 		}
 		if (string(p)[0] == MOVEMENT) {

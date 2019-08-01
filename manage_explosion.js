@@ -34,29 +34,35 @@ function set_player_cases()
 {
 	let cases = [];
 	Players.player.forEach(function(element) {
+		if (element.isdead == true)
+			return ;
 		cases[element.id] = [];
 		let x = element.anim.x / tile_size;
-		let y = element.anim.y / tile_size;
+		let y = (element.anim.y + 32) / tile_size;
 		let tmp;
 
+		console.debug(element.anim.x);
+		console.debug(element.anim.y);
+		console.debug(x, y);
 		tmp = (x % 1) * 10;
-		if (tmp < 1) {
+		if (tmp < 2) {
 			cases[element.id].push({x:Math.floor(x - 1), y:Math.floor(y)});
 		}
-		if (tmp > 9)
+		if (tmp > 8)
 		{
 			cases[element.id].push({x:Math.floor(x + 1), y:Math.floor(y)});
 		}
 		tmp = (y % 1) * 10;
-		if (tmp < 1) {
+		if (tmp < 2) {
 			cases[element.id].push({x:Math.floor(x), y:Math.floor(y - 1)});
 		}
-		if (tmp > 9)
+		if (tmp > 8)
 		{
 			cases[element.id].push({x:Math.floor(x), y:Math.floor(y + 1)});
 		}
 		cases[element.id].push({x:Math.floor(x), y:Math.floor(y)});
 	});
+	console.debug(cases);
 	return (cases);
 }
 
@@ -64,7 +70,7 @@ function handle_continuous_explosion(min_x, min_y, mid_x, mid_y, max_x, max_y)
 {
 	let cases = set_player_cases();
 
-	//	console.debug("minx:%d min_y:%d mid_x:%d mid_y:%d max_x:%d max_y:%d", min_x, min_y, mid_x, mid_y, max_x, max_y);
+	console.debug("minx:%d min_y:%d mid_x:%d mid_y:%d max_x:%d max_y:%d", min_x, min_y, mid_x, mid_y, max_x, max_y);// MIN AND MAX ARE ABSURD
 	for (let x = min_x; x <= max_x; x++){
 		if (level[mid_y][x] == 3)
 		{
@@ -84,11 +90,15 @@ function handle_continuous_explosion(min_x, min_y, mid_x, mid_y, max_x, max_y)
 		for (let j = 0, len2 = cases[i].length; j < len2; j++){
 			if (cases[i][j].x >= min_x && cases[i][j].x <= max_x && cases[i][j].y == mid_y)
 			{
+				Players.player[i].isdead = true;
 				console.log("Player %d is killed\n", i);
+				socket.send("D".concat(i));
 			}
 			if (cases[i][j].y >= min_y && cases[i][j].y <= max_y && cases[i][j].x == mid_x)
 			{
+				Players.player[i].isdead = true;
 				console.log("Player %d is killed\n", i);
+				socket.send("D".concat(i));
 			}
 		}
 	}
