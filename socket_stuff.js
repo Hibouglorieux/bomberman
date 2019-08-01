@@ -37,6 +37,33 @@ function init_socket()
 			if (typeof Players.player[nb] == 'undefined' || typeof Players.player[nb] == 'undefined')
 				return ;
 			let nb2 = parseInt(event.data.slice(3));
+			let prefix = set_prefix(nb);
+
+			let mvt = identify_mvt(event.data[1] == 'x' ? true : false, nb2, Players.player[nb].anim);
+			console.debug(mvt);
+			if (!Players.player[nb].anim.anims.isPlaying || Players.player[nb].face != mvt)
+			{
+				switch (mvt){
+					case RIGHT:
+						Players.player[nb].anim.play(prefix.concat("right"));
+						Players.player[nb].anim.face = RIGHT;
+						break;
+					case LEFT:
+						Players.player[nb].anim.play(prefix.concat("left"));
+						Players.player[nb].anim.face = LEFT;
+						break;
+					case DOWN:
+						Players.player[nb].anim.play(prefix.concat("down"));
+						Players.player[nb].anim.face = DOWN;
+						break;
+					case UP:
+						Players.player[nb].anim.play(prefix.concat("up"));
+						Players.player[nb].anim.face = UP;
+						break;
+					default:
+						break
+				}
+			}
 			if (event.data[1] == 'x')
 				Players.player[nb].anim.x = nb2;
 			if (event.data[1] == 'y')
@@ -65,7 +92,7 @@ function init_socket()
 		if (event.data[0] == CHAIN_EXPLOSION)
 		{
 			let str = event.data.split(":");
-			
+
 			console.debug("received CHAIN_EXPLOSION query");
 			console.debug(global.bombs);
 			console.debug(event.data);

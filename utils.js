@@ -1,3 +1,27 @@
+function identify_mvt(x, value, pos)
+{
+	if (x == true)
+	{
+		if (value < pos.x)
+			return LEFT;
+		else
+			return RIGHT
+	}
+	if (value < pos.y)
+		return UP;
+	return DOWN
+}
+function set_prefix(id)
+{
+	if (id == 0)
+		return ("w_");
+	if (id == 1)
+		return ("b_");
+	if (id == 2)
+		return ("r_");
+	if (id == 3)
+		return ("u_");
+}
 function map2pixel_xy(x, y)
 {
 	let pixels = {

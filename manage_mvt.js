@@ -1,16 +1,11 @@
 function movement(key, player)
 {
-	let prefix = "w_";
+	if (typeof movement.prefix == 'undefined')
+		movement.prefix = set_prefix(id);
 
-	if (id == 1)
-		prefix = "b_"
-	if (id == 2)
-		prefix = "r_"
-	if (id == 3)
-		prefix = "u_"
 	if (key == UP)
 	{
-		for (var i = 0; i < speed; i++)
+		for (let i = 0; i < speed; i++)
 		{
 			player.anim.y -= 1;
 			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0)
@@ -22,12 +17,12 @@ function movement(key, player)
 				socket.send("My".concat(player.anim.y.toString()));
 		}
 		if (player.face != UP || !player.anim.anims.isPlaying)
-			player.anim.play(prefix.concat("up"));
+			player.anim.play(movement.prefix.concat("up"));
 		player.face = UP;
 	}
 	else if (key == DOWN)
 	{
-		for (var i = 0; i < speed; i++)
+		for (let i = 0; i < speed; i++)
 		{
 			player.anim.y += 1;
 			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[0]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[1]) != 0)
@@ -39,12 +34,12 @@ function movement(key, player)
 				socket.send("My".concat(player.anim.y.toString()));
 		}
 		if (player.face != DOWN || !player.anim.anims.isPlaying)
-			player.anim.play(prefix.concat("down"));
+			player.anim.play(movement.prefix.concat("down"));
 		player.face = DOWN;
 	}
 	else if (key == LEFT)
 	{
-		for (var i = 0; i < speed; i++)
+		for (let i = 0; i < speed; i++)
 		{
 			player.anim.x -= 1;
 			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[1]) != 0)
@@ -56,12 +51,12 @@ function movement(key, player)
 				socket.send("Mx".concat(player.anim.x.toString()));
 		}
 		if (player.face != LEFT || !player.anim.anims.isPlaying)
-			player.anim.play(prefix.concat("left"));
+			player.anim.play(movement.prefix.concat("left"));
 		player.face = LEFT;
 	}
 	else if (key == RIGHT)
 	{
-		for (var i = 0; i < speed; i++)
+		for (let i = 0; i < speed; i++)
 		{
 			player.anim.x += 1;
 			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[0]) != 0)
@@ -73,23 +68,23 @@ function movement(key, player)
 				socket.send("Mx".concat(player.anim.x.toString()));
 		}
 		if (player.face != RIGHT || !player.anim.anims.isPlaying)
-			player.anim.play(prefix.concat("right"));
+			player.anim.play(movement.prefix.concat("right"));
 		player.face = RIGHT;
 	}
 	else
 	{
 		switch (player.face) {
 			case RIGHT:
-				player.anim.setTexture(prefix.concat("right_0"));
+				player.anim.setTexture(movement.prefix.concat("right_0"));
 				break;
 			case LEFT:
-				player.anim.setTexture(prefix.concat("left_0"));
+				player.anim.setTexture(movement.prefix.concat("left_0"));
 				break;
 			case DOWN:
-				player.anim.setTexture(prefix.concat("down_0"));
+				player.anim.setTexture(movement.prefix.concat("down_0"));
 				break;
 			case UP:
-				player.anim.setTexture(prefix.concat("up_0"));
+				player.anim.setTexture(movement.prefix.concat("up_0"));
 				break;
 			default:
 				break;
