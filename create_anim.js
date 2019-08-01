@@ -234,8 +234,6 @@
 		game.anims.create({
 			key: 'bomb-anim-0',
 			frames: [
-			{key: 'bomb-2' },
-			{key: 'bomb-1' },
 			{key: 'bomb-0' },
 			{key: 'bomb-1' },
 			{key: 'bomb-2' },
@@ -244,8 +242,10 @@
 			{key: 'bomb-1' },
 			{key: 'bomb-2' },
 			{key: 'bomb-1' },
-			{key: 'bomb-0' }],
-			frameRate: 2,
+			{key: 'bomb-0' },
+			{key: 'bomb-1' },
+			{key: 'bomb-2' }],
+			frameRate: 4,
 			repeat: 0});
 		game.anims.create({
 			key: 'melt_block',

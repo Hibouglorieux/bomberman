@@ -43,6 +43,10 @@ func	send_all_but_self(str string, id_of_self int) {
 	}
 }
 
+func	remove_client(index int){
+	Clients = append(Clients[:index], Clients[index+1:]...)
+}
+
 func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever something is interesting you can answer to client or all client with .WriteMessage method
 	Clients = append(Clients, conn)
 	var id int;
@@ -73,18 +77,11 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 		}
 		if (new_msg != ""){
 			if err := conn.WriteMessage(messageType, []byte(new_msg)); err != nil { // writes in message, if error removes client from Clients
-				for k, elem := range Clients{
-					if (elem == conn) {
-						Clients[k] = Clients[len(Clients) - 1]
-						Clients = Clients[:len(Clients) - 1]
-						break
-					}
-				}
+				remove_client(id)
 				log.Println(err)
 				return
 			}
 		}
-
 	}
 }
 

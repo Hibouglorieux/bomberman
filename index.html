@@ -176,13 +176,17 @@ function update ()
 	if (update.key == LEFT && key_left.isUp && key_left2.isUp)
 		update.key = -1;
 	movement(update.key, Players.player[id]);
-	if (key_space.isDown)
+	if (Phaser.Input.Keyboard.JustDown(key_space))
 	{
 		let pos = player_pixel_2_map(Players.player[id].anim);
-		global.bombs.push(bomb_anim(this, pos, 3));
-		mur[3][3].play('melt_block');
+		global.bombs.push(bomb_anim(this, pos, 3, true));
 	}
-
+	global.explo.forEach(function(element) {
+		if (element.mine)
+		{
+			handle_continuous_explosion(element.cases);
+		}
+	});
 }
 	</script>
 
@@ -193,5 +197,6 @@ function update ()
 	<script src="utils.js"></script>
 	<script src="manage_explosion.js"></script>
 	<script src="init.js"></script>
+	<script src="handle_explosion.js"></script>
 </body>
 </html>
