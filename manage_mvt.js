@@ -17,12 +17,19 @@ function movement(key, player, restart)
 		for (let i = 0; i < speed; i++)
 		{
 			player.anim.y -= 1;
-			if ((get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0) || get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0)
-			{
+			if (handle_case_mvt(player, get_player_hitbox(player.anim.x, player.anim.y)[2]) && 
+					handle_case_mvt(player, get_player_hitbox(player.anim.x, player.anim.y)[3]))
+				y = true
+			else{
 				player.anim.y += 1;
-				// break;
-			} else
-				y = true;
+				break ;
+			}
+//			if ((get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0) || get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0)
+//			{
+//				player.anim.y += 1;
+//				// break;
+//			} else
+//				y = true;
 		}
 		if (player.face != UP || !player.anim.anims.isPlaying)
 			player.anim.play(movement.prefix.concat("up"));

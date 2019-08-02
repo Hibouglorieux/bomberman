@@ -2,9 +2,17 @@ function handle_case_mvt(player, x_y)
 {
 	let actual_pos = player_pixel_2_map(player.anim);
 	let new_pos = {y::Math.floor(x_y[1] / tile_size), x:Math.floor(x_y[0] / tile_size)};
+
 	if (new_pos.y == actual_pos.y && new_pos.x == actual_pos.x)
 		return (true);
-	if (level[new_pos]);
+	if (level[new_pos.y][new_pos.x] == 0)
+		return (true);
+	if (level[new_pos.y][new_pos.x] > 3) {
+		grab_powerup(new_pos.x, new_pos.y);
+		get_power_up(level[new_pos.y][new_pos.x]);
+		return (true);
+	}
+	return (false);
 }
 
 function handle_collision(

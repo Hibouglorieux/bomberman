@@ -22,7 +22,20 @@ function get_power_up_texture(nb)
 
 function grab_powerup(x, y)
 {
-	if (level[y][x] < 4)
+	let power_up = level[y][x])
+	if (power_up < 4)
 		return ;
-
+	if (power_up == FLAME_UP && global.power.flame <= 9)
+		global.power.flame++;
+	if (power_up == BOMB_UP && global.power.bomb <= 9)
+		global.power.bomb++;
+	if (power_up == BOMB_P && global.power.pbomb <= 9)
+		global.power.pbomb++;
+	if (power_up == SPEED_UP && global.power.speed <= 9.0)
+		global.power.speed + = 0.4;
+	if (power_up == ARMOR)
+		;//damn there is a lot to do with that
+	socket.send("U:".concat(x.toString(), ":", y.toString()));
+	level[y][x] = 0;
+	mur[y][x].setTexture)('vert');
 }

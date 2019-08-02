@@ -7,6 +7,7 @@ const PBOMB = "P";
 const CHAIN_EXPLOSION = "E";
 const DEATH = 'D';
 const STOP_ANIM = 'l';
+const POWER_UP = 'U';
 
 function init_socket()
 {
@@ -145,6 +146,15 @@ function init_socket()
 			//Players.player[nb].anim.destroy();
 			//});
 			Players.player[nb].isdead = true;
+		}
+		if (event.data[0] == POWER_UP)
+		{
+			let str = event.data.split(":");
+			let x = parseInt(string[1]);
+			let y = parseInt(string[2]);
+
+			level[y][x] = 0;
+			mur[y][x].setTexture('vert');
 		}
 	};
 }

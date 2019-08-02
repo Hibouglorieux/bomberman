@@ -17,6 +17,7 @@ const PBOMB = 'P'
 const NEW_ID = 'n'
 const BLOCK_DESTROYED = 'b'
 const CHAIN_EXPLOSION = 'E'
+const POWER_UP = 'U'
 const MOVEMENT = 'M' //easier to read to detect messages and reduce size of packages
 const STOP_ANIM = 'l'
 const NOTHING = 0
@@ -140,7 +141,7 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 			send_all_but_self(string(p), id);
 			continue ;
 		}
-		if (string(p)[0] == CHAIN_EXPLOSION || string(p)[0] == STOP_ANIM){
+		if (string(p)[0] == CHAIN_EXPLOSION || string(p)[0] == STOP_ANIM || string(p)[0] == POWER_UP){
 			send_all_but_self(string(p), id);
 			continue ;
 		}
