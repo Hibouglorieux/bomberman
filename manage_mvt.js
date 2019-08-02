@@ -40,12 +40,19 @@ function movement(key, player, restart)
 		for (let i = 0; i < speed; i++)
 		{
 			player.anim.y += 1;
-			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[0]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[1]) != 0)
-			{
+			if (handle_case_mvt(player, get_player_hitbox(player.anim.x, player.anim.y)[0]) && 
+					handle_case_mvt(player, get_player_hitbox(player.anim.x, player.anim.y)[1]))
+				y = true
+			else{
 				player.anim.y -= 1;
+				break ;
+			}
+			//if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[0]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[1]) != 0)
+			//{
+				//player.anim.y -= 1;
 				// break;
-			} else
-				y = true;
+			//} else
+				//y = true;
 		}
 		if (player.face != DOWN || !player.anim.anims.isPlaying)
 			player.anim.play(movement.prefix.concat("down"));
@@ -56,12 +63,19 @@ function movement(key, player, restart)
 		for (let i = 0; i < speed; i++)
 		{
 			player.anim.x -= 1;
-			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[1]) != 0)
-			{
+			if (handle_case_mvt(player, get_player_hitbox(player.anim.x, player.anim.y)[3]) && 
+					handle_case_mvt(player, get_player_hitbox(player.anim.x, player.anim.y)[1]))
+				x = true
+			else{
 				player.anim.x += 1;
-				// break;
-			} else
-				x = true;
+				break ;
+			}
+			//if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[1]) != 0)
+			//{
+			//	player.anim.x += 1;
+			//	// break;
+			//} else
+			//	x = true;
 		}
 		if (player.face != LEFT || !player.anim.anims.isPlaying)
 			player.anim.play(movement.prefix.concat("left"));
@@ -72,12 +86,19 @@ function movement(key, player, restart)
 		for (let i = 0; i < speed; i++)
 		{
 			player.anim.x += 1;
-			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[0]) != 0)
-			{
+			if (handle_case_mvt(player, get_player_hitbox(player.anim.x, player.anim.y)[2]) && 
+					handle_case_mvt(player, get_player_hitbox(player.anim.x, player.anim.y)[0]))
+				x = true
+			else{
 				player.anim.x -= 1;
-				// break;
-			} else
-				x = true;
+				break ;
+			}
+//			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[0]) != 0)
+//			{
+//				player.anim.x -= 1;
+//				// break;
+//			} else
+//				x = true;
 		}
 		if (player.face != RIGHT || !player.anim.anims.isPlaying)
 			player.anim.play(movement.prefix.concat("right"));
