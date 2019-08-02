@@ -3,6 +3,7 @@ const ADD_PLAYER = 'A';
 const MOVE = 'M';
 const MELT = "b";
 const BOMB = "B";
+const PBOMB = "P";
 const CHAIN_EXPLOSION = "E";
 const DEATH = 'D';
 const STOP_ANIM = 'l';
@@ -118,11 +119,14 @@ function init_socket()
 				mur[parseInt(str[2])][parseInt(str[1])].setTexture(get_power_up_texture(parseInt(str[3])));
 			});
 		}
-		if (event.data[0] == BOMB)
+		if (event.data[0] == BOMB || event.data[0] == PBOMB)
 		{
 			let str = event.data.split(":");
 
-			global.bombs.push(add_new_bomb(dascene, {x:parseInt(str[1]), y:parseInt(str[2])}, parseInt(str[3]),false));
+			if (event.data[0] == BOMB)
+				global.bombs.push(add_new_bomb(dascene, {x:parseInt(str[1]), y:parseInt(str[2])}, parseInt(str[3]),false));
+			else
+				global.bombs.push(add_new_pbomb(dascene, {x:parseInt(str[1]), y:parseInt(str[2])}, parseInt(str[3]),false));
 		}
 		if (event.data[0] == CHAIN_EXPLOSION)
 		{

@@ -1,21 +1,47 @@
-function	add_new_bomb(scene, pos, length, mine)
+function	add_new_pbomb(scene, pos, mine)
 {
 	if (mine && level[pos.y][pos.x] == 3)
-		return ;
+		return (false);
 	if (mine)
-		socket.send("B:".concat(pos.x.toString(), ":", pos.y.toString(), ":", length.toString()));
+	{
+		socket.send("P:".concat(pos.x.toString(), ":", pos.y.toString(), ":15"));
+		global.power.pbomb -= 1;
+	}
+	let bomb = {pos:{x:pos.x, y:pos.y}, length:15, mine:mine};
 
-	let bomb = {pos:{x:pos.x, y:pos.y}, length:length, mine:mine};
+	bomb.anim = scene.add.sprite(map2pixel(pos.x), map2pixel(pos.y), 'pbomb-0').play('pbomb-anim-0');
 
-	bomb.anim = scene.add.sprite(map2pixel(pos.x), map2pixel(pos.y), 'bomb-0').play('bomb-anim-0');
-	
 	level[pos.y][pos.x] = 3;
 	bomb.anim.once('animationcomplete', () => {
 		explosion_anim(scene, bomb.pos, bomb.length, mine);
 		global.bombs.splice(global.bombs.indexOf(bomb), 1);
 		bomb.anim.destroy();
 		delete bomb;
-		});
+	});
+	return (bomb);
+}
+
+function	add_new_bomb(scene, pos, length, mine)
+{
+	if (mine && level[pos.y][pos.x] == 3)
+		return (false);
+	if (mine)
+	{
+		socket.send("B:".concat(pos.x.toString(), ":", pos.y.toString(), ":", length.toString()));
+		global.power.bomb -= 1;
+	}
+
+	let bomb = {pos:{x:pos.x, y:pos.y}, length:length, mine:mine};
+
+	bomb.anim = scene.add.sprite(map2pixel(pos.x), map2pixel(pos.y), 'bomb-0').play('bomb-anim-0');
+
+	level[pos.y][pos.x] = 3;
+	bomb.anim.once('animationcomplete', () => {
+		explosion_anim(scene, bomb.pos, bomb.length, mine);
+		global.bombs.splice(global.bombs.indexOf(bomb), 1);
+		bomb.anim.destroy();
+		delete bomb;
+	});
 	return (bomb);
 }
 
@@ -95,10 +121,17 @@ function	explosion_anim(scene, pos, length, mine)
 	// to finish
 	global.explo.push(explo);
 	explo.anim[0].once('animationcomplete', () => {
+		if (mine){
+			if (length == 15){
+				global.power.pbomb += 1;
+			} else {
+				global.power.bomb += 1;
+			}
+		}
 		global.explo.splice(global.bombs.indexOf(explo), 1);
 		explo.anim.forEach((elem)=>{
 			elem.destroy()
 		});
 		delete explo
-		});
+	});
 }

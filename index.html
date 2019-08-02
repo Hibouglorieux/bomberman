@@ -107,7 +107,7 @@ function create ()
 	init_socket();
 }
 
-let global = {bombs:[], explo:[], power:{bombs:1, pbomb:0, speed:5.0, flame:2}};
+let global = {bombs:[], explo:[], power:{bomb:1, pbomb:0, speed:5.0, flame:2}};
 
 function update ()
 {
@@ -163,12 +163,7 @@ function update ()
 		socket.send(STOP_ANIM.concat(id.toString()));
 	}
 	if (Phaser.Input.Keyboard.JustDown(key_space))
-	{
-		let pos = player_pixel_2_map(Players.player[id].anim);
-		let ret = add_new_bomb(this, pos, global.power.flame, true);
-		if (typeof ret != 'undefined')
-			global.bombs.push(ret);
-	}
+		try_to_put_bomb(player_pixel_2_map(Players.player[id].anim));
 	//si probleme de perf faire ce foreach toutes les X frames a la place
 	global.explo.forEach(function(element) {
 		if (element.mine)
@@ -190,5 +185,6 @@ function update ()
 	<script src="init.js"></script>
 	<script src="socket_stuff.js"></script>
 	<script src="power_ups.js"></script>
+	<script src="bomb.js"></script>
 </body>
 </html>

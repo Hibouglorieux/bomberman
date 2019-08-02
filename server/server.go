@@ -13,6 +13,7 @@ import (
 const ID_REQ = 'i'
 const DEATH = 'D'
 const BOMB = 'B'
+const PBOMB = 'P'
 const NEW_ID = 'n'
 const BLOCK_DESTROYED = 'b'
 const CHAIN_EXPLOSION = 'E'
@@ -136,7 +137,7 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 			fmt.Println(string(p)) // print out the message received for clarity / debug
 		}
 
-		if (string(p)[0] == BOMB){
+		if (string(p)[0] == BOMB || string(p)[0] == PBOMB){
 			send_all_but_self(string(p), id);
 			continue ;
 		}
