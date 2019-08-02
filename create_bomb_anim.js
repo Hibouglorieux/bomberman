@@ -43,9 +43,9 @@ function	explosion_anim(scene, pos, length, mine)
 			explo.anim.push(scene.add.sprite(map2pixel(x), pixel_y, 'explo-0-maxleft').play('explo_maxleft'));
 		x--;
 	}
-	explo.min_x = x;
+	explo.min_x = x + 1;
 	x = pos.x + 1;
-	while (x - pos.x <= length && x < 14)
+	while (x - pos.x <= length && x < 15)
 	{
 		if (check_case_explosion(x, y, mine))
 		{
@@ -59,7 +59,7 @@ function	explosion_anim(scene, pos, length, mine)
 			explo.anim.push(scene.add.sprite(map2pixel(x), pixel_y, 'explo-0-maxright').play('explo_maxright'));
 		x++;
 	}
-	explo.max_x = x;
+	explo.max_x = x - 1;
 	let pixel_x = map2pixel(pos.x);
 	y--;
 	x = pos.x;
@@ -76,9 +76,9 @@ function	explosion_anim(scene, pos, length, mine)
 			explo.anim.push(scene.add.sprite(pixel_x, map2pixel(y), 'explo-0-maxtop').play('explo_maxtop'));
 		y--;
 	}
-	explo.min_y = y;
+	explo.min_y = y + 1;
 	y = pos.y + 1;
-	while (y - pos.y <= length && y < 12)
+	while (y - pos.y <= length && y < 13)
 	{
 		if (check_case_explosion(x, y, mine))
 		{
@@ -91,7 +91,7 @@ function	explosion_anim(scene, pos, length, mine)
 			explo.anim.push(scene.add.sprite(pixel_x, map2pixel(y), 'explo-0-maxdown').play('explo_maxdown'));
 		y++;
 	}
-	explo.max_y = y;
+	explo.max_y = y - 1; // to test
 	// to finish
 	global.explo.push(explo);
 	explo.anim[0].once('animationcomplete', () => {

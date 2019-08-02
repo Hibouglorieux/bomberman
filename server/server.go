@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"net/http"
 	"github.com/gorilla/websocket"
+	"time"
+	"math/rand"
 )
 
 const ID_REQ = 'i'
@@ -15,6 +17,34 @@ const NEW_ID = 'n'
 const BLOCK_DESTROYED = 'b'
 const CHAIN_EXPLOSION = 'E'
 const MOVEMENT = 'M' //easier to read to detect messages and reduce size of packages
+const STOP_ANIM = 'l'
+const NOTHING = 0
+const FLAME_UP = 4
+const BOMB_UP = 5
+const BOMB_P = 6
+const SPEED_UP = 7
+const ARMOR = 8
+
+var seed = rand.NewSource(time.Now().UnixNano())
+
+var const_power_up_list = []int {
+	FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, //10
+	FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, //10
+	BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, //10
+	BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, BOMB_UP, //10
+	BOMB_P, BOMB_P, BOMB_P, BOMB_P, BOMB_P, //5
+	SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, //10
+	SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, SPEED_UP, //10
+	ARMOR, ARMOR, // 2
+	NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, //10
+	NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, //10
+	NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, NOTHING, //10
+	NOTHING, NOTHING, NOTHING, NOTHING}//4
+// 67 total items
+// 34 nothing
+// 101 blocks
+
+var power_ups []int
 
 type clts struct{
 	id int
@@ -52,11 +82,13 @@ func	send_all_but_self(str string, id_of_self int) {
 
 func	get_a_new_powerup(str string) string{
 
-	var powerup int;
+	var random int = rand.Int() % len(power_ups)
+	var ret int = power_ups[random]
+	power_ups[random] = power_ups[len(power_ups) - 1]
+	power_ups = power_ups[:len(power_ups) - 1]
 
-	powerup = 0;//search array in random
-
-	return str + ":" + strconv.Itoa(powerup)
+	fmt.Println(len(power_ups))
+	return str + ":" + strconv.Itoa(ret)
 }
 
 func set_id (id int) int {
@@ -108,12 +140,12 @@ func reader(conn *websocket.Conn) { // read all messages as goroutines, whenever
 			send_all_but_self(string(p), id);
 			continue ;
 		}
-		if (string(p)[0] == CHAIN_EXPLOSION){
+		if (string(p)[0] == CHAIN_EXPLOSION || string(p)[0] == STOP_ANIM){
 			send_all_but_self(string(p), id);
 			continue ;
 		}
 		if (string(p)[0] == BLOCK_DESTROYED){
-			send_all_but_self(get_a_new_powerup(string(p)), id)
+			send_all(get_a_new_powerup(string(p)))
 			continue ;
 		}
 		if (string(p)[0] == ID_REQ) {
@@ -164,6 +196,7 @@ func setupRoutes() {
 }
 
 func main() {
+	power_ups = const_power_up_list[:]
 	fmt.Println("Hello World")
 	setupRoutes()
 	log.Fatal(http.ListenAndServe(":11337", nil))

@@ -1,8 +1,17 @@
-function movement(key, player)
+function movement(key, player, restart)
 {
+	let x = false;
+	let y = false;
+
 	if (typeof movement.prefix == 'undefined')
 		movement.prefix = set_prefix(id);
-
+	if (typeof movement.x == 'undefined' || typeof movement.y == 'undefined' || restart) // actually no need for this
+	{
+		movement.x = player.anim.x;
+		movement.y = player.anim.y;
+		if (restart)
+			return ;
+	}
 	if (key == UP)
 	{
 		for (let i = 0; i < speed; i++)
@@ -12,9 +21,8 @@ function movement(key, player)
 			{
 				player.anim.y += 1;
 				// break;
-			}
-			else
-				socket.send("My".concat(player.anim.y.toString()));
+			} else
+				y = true;
 		}
 		if (player.face != UP || !player.anim.anims.isPlaying)
 			player.anim.play(movement.prefix.concat("up"));
@@ -29,9 +37,8 @@ function movement(key, player)
 			{
 				player.anim.y -= 1;
 				// break;
-			}
-			else
-				socket.send("My".concat(player.anim.y.toString()));
+			} else
+				y = true;
 		}
 		if (player.face != DOWN || !player.anim.anims.isPlaying)
 			player.anim.play(movement.prefix.concat("down"));
@@ -46,9 +53,8 @@ function movement(key, player)
 			{
 				player.anim.x += 1;
 				// break;
-			}
-			else
-				socket.send("Mx".concat(player.anim.x.toString()));
+			} else
+				x = true;
 		}
 		if (player.face != LEFT || !player.anim.anims.isPlaying)
 			player.anim.play(movement.prefix.concat("left"));
@@ -63,9 +69,8 @@ function movement(key, player)
 			{
 				player.anim.x -= 1;
 				// break;
-			}
-			else
-				socket.send("Mx".concat(player.anim.x.toString()));
+			} else
+				x = true;
 		}
 		if (player.face != RIGHT || !player.anim.anims.isPlaying)
 			player.anim.play(movement.prefix.concat("right"));
@@ -90,4 +95,9 @@ function movement(key, player)
 				break;
 		}
 	}
+	if (x)
+		socket.send("Mx".concat(player.anim.x.toString()));
+	if (y)
+		socket.send("My".concat(player.anim.y.toString()));
+	return (x == true ? x : y);
 }

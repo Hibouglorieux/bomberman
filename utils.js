@@ -5,11 +5,12 @@ function identify_mvt(x, value, pos)
 		if (value < pos.x)
 			return LEFT;
 		else
-			return RIGHT
+			return RIGHT;
 	}
 	if (value < pos.y)
 		return UP;
-	return DOWN
+	else
+		return DOWN;
 }
 function set_prefix(id)
 {
@@ -54,16 +55,7 @@ function player_pixel_2_map(player)
 {
 	let x = player.x;
 	let y = player.y;
-	/* Pansement du scale
-	if (player.face == "up")
-		y -= 1 * scale;
-	if (player.face == "down")
-		y += 1 * scale;
-	if (player.face == "right")
-		x += 1 * scale;
-	if (player.face == "left")
-		x -= 1 * scale;
-			*/
+
 	let	pos = {
 		x:Math.floor(x / (tile_size)),
 		y:Math.floor((y + tile_size * 0.5) / (tile_size))

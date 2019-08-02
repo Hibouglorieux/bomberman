@@ -10,11 +10,11 @@ function check_case_explosion(x, y, mine)
 		return (1);
 	if (value == 2 && mur[y][x].texture.key == 'block')
 	{
-		mur[y][x].play('melt_block');
-		mur[y][x].once('animationcomplete', () =>{
-			mur[y][x].setTexture('vert');
-			level[y][x] = 0;
-		});
+		//mur[y][x].play('melt_block');
+		//mur[y][x].once('animationcomplete', () =>{
+			//mur[y][x].setTexture('vert');
+			//level[y][x] = 0;
+		//});
 		socket.send("b:".concat(x.toString(), ":", y.toString()));
 		//socket.emit (and only that because need return of server to set powerup)
 	}
@@ -78,7 +78,9 @@ function handle_continuous_explosion(min_x, min_y, mid_x, mid_y, max_x, max_y)
 			socket.send("E:".concat(x.toString(), ":", mid_y.toString()));
 		}
 	}
+	console.debug("min_y :%d", min_y);
 	for (let y = min_y; y <= max_y; y++){
+	console.debug("y :%d", y);
 		if (level[y][mid_x] == 3)
 		{
 			make_a_bomb_explode(mid_x, y);

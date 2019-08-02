@@ -4,7 +4,8 @@ const MOVE = 'M';
 const MELT = "b";
 const BOMB = "B";
 const CHAIN_EXPLOSION = "E";
-const DEATH = 'D'
+const DEATH = 'D';
+const STOP_ANIM = 'l';
 
 function init_socket()
 {
@@ -53,19 +54,19 @@ function init_socket()
 				switch (mvt){
 					case RIGHT:
 						Players.player[nb].anim.play(prefix.concat("right"));
-						Players.player[nb].anim.face = RIGHT;
+						Players.player[nb].face = RIGHT;
 						break;
 					case LEFT:
 						Players.player[nb].anim.play(prefix.concat("left"));
-						Players.player[nb].anim.face = LEFT;
+						Players.player[nb].face = LEFT;
 						break;
 					case DOWN:
 						Players.player[nb].anim.play(prefix.concat("down"));
-						Players.player[nb].anim.face = DOWN;
+						Players.player[nb].face = DOWN;
 						break;
 					case UP:
-						Players.player[nb].anim.play(prefix.concat("up"));
-						Players.player[nb].anim.face = UP;
+						Players.player[nb].anim.play(prefix.concat("up")); // wtf bug ????
+						Players.player[nb].face = UP;
 						break;
 					default:
 						break
@@ -76,6 +77,36 @@ function init_socket()
 			if (event.data[1] == 'y')
 				Players.player[nb].anim.y = nb2;
 		}
+		if (event.data[0] == STOP_ANIM)
+		{
+			console.log("stopping animation:%s", event.data);
+			let nb = parseInt(event.data[1]);
+			if (typeof Players.player[nb].anim != 'undefined')
+				switch (Players.player[nb].face) {
+					case RIGHT:
+						if (Players.player[nb].anim.isPlaying)
+							Players.player[nb].anim.stop();
+						Players.player[nb].anim.setTexture(set_prefix(nb).concat("right_0"));
+						break;
+					case LEFT:
+						if (Players.player[nb].anim.isPlaying)
+							Players.player[nb].anim.stop();
+						Players.player[nb].anim.setTexture(set_prefix(nb).concat("left_0"));
+						break;
+					case DOWN:
+						if (Players.player[nb].anim.isPlaying)
+							Players.player[nb].anim.stop();
+						Players.player[nb].anim.setTexture(set_prefix(nb).concat("down_0"));
+						break;
+					case UP:
+						if (Players.player[nb].anim.isPlaying)
+							Players.player[nb].anim.stop();
+						Players.player[nb].anim.setTexture(set_prefix(nb).concat("up_0"));
+						break;
+					default:
+						break
+				}
+		}
 		if (event.data[0] == MELT)
 		{
 			let str = event.data.split(":");
@@ -83,11 +114,8 @@ function init_socket()
 			mur[parseInt(str[2])][parseInt(str[1])].play('melt_block');
 			mur[parseInt(str[2])][parseInt(str[1])].power_up_inc = parseInt(str[3]);
 			mur[parseInt(str[2])][parseInt(str[1])].once('animationcomplete', () =>{
-				if (parseInt(str[3]) == 0)
-					mur[parseInt(str[2])][parseInt(str[1])].setTexture('vert');
-				//else
-				//	mur[parseInt(str[2])][parseInt(str[1])].setTexture(get_power_up_texture(parseInt(str[3])));
-				level[parseInt(str[2])][parseInt(str[1])]= 0; // make an array of powerup ?
+				level[parseInt(str[2])][parseInt(str[1])]= parseInt(str[3]); // make an array of powerup ?
+				mur[parseInt(str[2])][parseInt(str[1])].setTexture(get_power_up_texture(parseInt(str[3])));
 			});
 		}
 		if (event.data[0] == BOMB)
@@ -110,7 +138,7 @@ function init_socket()
 			let nb = parseInt(event.data[1]);
 			Players.player[nb].anim.play(set_prefix(nb).concat('death'));
 			//Players.player[nb].anim.once('animationcomplete', () =>{ 
-				//Players.player[nb].anim.destroy();
+			//Players.player[nb].anim.destroy();
 			//});
 			Players.player[nb].isdead = true;
 		}

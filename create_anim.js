@@ -303,6 +303,22 @@ function create_anim()
 			{key: 'melt5' }],
 		frameRate: framerateforexplosion * 2,
 		repeat: 0});
+	game.anims.create({
+		key: 'pbomb-anim-0',
+		frames: [
+			{key: 'pbomb-0' },
+			{key: 'pbomb-1' },
+			{key: 'pbomb-2' },
+			{key: 'pbomb-1' },
+			{key: 'pbomb-0' },
+			{key: 'pbomb-1' },
+			{key: 'pbomb-2' },
+			{key: 'pbomb-1' },
+			{key: 'pbomb-0' },
+			{key: 'pbomb-1' },
+			{key: 'pbomb-2' }],
+		frameRate: 4,
+		repeat: 0});
 
 	load_player_anim()
 }

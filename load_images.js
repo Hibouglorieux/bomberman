@@ -121,8 +121,12 @@ function load_images(scene)
 	scene.load.image('bomb-0', 'items/Bomb0.png');
 	scene.load.image('bomb-1', 'items/Bomb1.png');
 	scene.load.image('bomb-2', 'items/Bomb2.png');
+	scene.load.image('pbomb-0', 'items/PBomb0.png');
+	scene.load.image('pbomb-1', 'items/PBomb1.png');
+	scene.load.image('pbomb-2', 'items/PBomb2.png');
 	scene.load.image('p_speed', 'items/P_speed.png');
 	scene.load.image('p_flame_up', 'items/P_flame.png');
 	scene.load.image('p_bomb', 'items/P_bomb.png');
+	scene.load.image('p_sbomb', 'items/P_sbomb.png');
 	scene.load.image('p_armor', 'items/P_armor.png');
 }
