@@ -124,9 +124,9 @@ function init_socket()
 			let str = event.data.split(":");
 
 			if (event.data[0] == BOMB)
-				global.bombs.push(add_new_bomb(dascene, {x:parseInt(str[1]), y:parseInt(str[2])}, parseInt(str[3]),false));
+				global.bombs.push(add_new_bomb(dascene, {x:parseInt(str[1]), y:parseInt(str[2])}, parseInt(str[3]), false));
 			else
-				global.bombs.push(add_new_pbomb(dascene, {x:parseInt(str[1]), y:parseInt(str[2])}, parseInt(str[3]),false));
+				global.bombs.push(add_new_pbomb(dascene, {x:parseInt(str[1]), y:parseInt(str[2])}, false));
 		}
 		if (event.data[0] == CHAIN_EXPLOSION)
 		{

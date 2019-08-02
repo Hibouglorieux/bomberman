@@ -18,6 +18,7 @@ function	add_new_pbomb(scene, pos, mine)
 		bomb.anim.destroy();
 		delete bomb;
 	});
+	console.debug(bomb);
 	return (bomb);
 }
 

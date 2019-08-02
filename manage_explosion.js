@@ -41,9 +41,9 @@ function set_player_cases()
 		let y = (element.anim.y + 32) / tile_size;
 		let tmp;
 
-		console.debug(element.anim.x);
-		console.debug(element.anim.y);
-		console.debug(x, y);
+		//console.debug(element.anim.x);
+		//console.debug(element.anim.y);
+		//console.debug(x, y);
 		tmp = (x % 1) * 10;
 		if (tmp < 2) {
 			cases[element.id].push({x:Math.floor(x - 1), y:Math.floor(y)});
@@ -62,7 +62,7 @@ function set_player_cases()
 		}
 		cases[element.id].push({x:Math.floor(x), y:Math.floor(y)});
 	});
-	console.debug(cases);
+	//console.debug(cases);
 	return (cases);
 }
 
@@ -70,7 +70,7 @@ function handle_continuous_explosion(min_x, min_y, mid_x, mid_y, max_x, max_y)
 {
 	let cases = set_player_cases();
 
-	console.debug("minx:%d min_y:%d mid_x:%d mid_y:%d max_x:%d max_y:%d", min_x, min_y, mid_x, mid_y, max_x, max_y);// MIN AND MAX ARE ABSURD
+	//console.debug("minx:%d min_y:%d mid_x:%d mid_y:%d max_x:%d max_y:%d", min_x, min_y, mid_x, mid_y, max_x, max_y);// MIN AND MAX ARE ABSURD
 	for (let x = min_x; x <= max_x; x++){
 		if (level[mid_y][x] == 3)
 		{
@@ -78,9 +78,9 @@ function handle_continuous_explosion(min_x, min_y, mid_x, mid_y, max_x, max_y)
 			socket.send("E:".concat(x.toString(), ":", mid_y.toString()));
 		}
 	}
-	console.debug("min_y :%d", min_y);
+	//console.debug("min_y :%d", min_y);
 	for (let y = min_y; y <= max_y; y++){
-	console.debug("y :%d", y);
+	//console.debug("y :%d", y);
 		if (level[y][mid_x] == 3)
 		{
 			make_a_bomb_explode(mid_x, y);

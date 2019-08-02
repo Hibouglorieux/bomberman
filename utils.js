@@ -62,6 +62,10 @@ function player_pixel_2_map(player)
 	}
 	return (pos);
 }
+function player_pixel2map(z)
+{
+	return (Math.floor((z + tile_size * 0.5) / tile_size));
+}
 
 function get_coord_x(x)
 {

@@ -26,7 +26,6 @@ const BOMB_P = 6
 const SPEED_UP = 7
 const ARMOR = 8
 
-var seed = rand.NewSource(time.Now().UnixNano())
 
 var const_power_up_list = []int {
 	FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, FLAME_UP, //10
@@ -197,6 +196,7 @@ func setupRoutes() {
 }
 
 func main() {
+	rand.NewSource(time.Now().UnixNano())
 	power_ups = const_power_up_list[:]
 	fmt.Println("Hello World")
 	setupRoutes()
