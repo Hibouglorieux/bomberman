@@ -17,7 +17,7 @@ function movement(key, player, restart)
 		for (let i = 0; i < speed; i++)
 		{
 			player.anim.y -= 1;
-			if (get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0 || get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0)
+			if ((get_case(get_player_hitbox(player.anim.x, player.anim.y)[2]) != 0) || get_case(get_player_hitbox(player.anim.x, player.anim.y)[3]) != 0)
 			{
 				player.anim.y += 1;
 				// break;

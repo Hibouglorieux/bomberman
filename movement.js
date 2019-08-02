@@ -1,3 +1,12 @@
+function handle_case_mvt(player, x_y)
+{
+	let actual_pos = player_pixel_2_map(player.anim);
+	let new_pos = {y::Math.floor(x_y[1] / tile_size), x:Math.floor(x_y[0] / tile_size)};
+	if (new_pos.y == actual_pos.y && new_pos.x == actual_pos.x)
+		return (true);
+	if (level[new_pos]);
+}
+
 function handle_collision(
 //replace level[y][x] by get_case_hitbox with circle hitbox
 function try_to_go_up(player)
