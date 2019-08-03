@@ -150,9 +150,10 @@ function init_socket()
 		if (event.data[0] == POWER_UP)
 		{
 			let str = event.data.split(":");
-			let x = parseInt(string[1]);
-			let y = parseInt(string[2]);
+			let x = parseInt(str[1]);
+			let y = parseInt(str[2]);
 
+			console.debug("shoudl remove, y:%d, x:%d", y, x)
 			level[y][x] = 0;
 			mur[y][x].setTexture('vert');
 		}
